@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -32,7 +33,7 @@ public class LoginController {
     }
 
     @RequestMapping(method = RequestMethod.POST,value = "login")
-    public String login(ModelMap model, LoginUser user) {
+    public @ResponseBody  String login(ModelMap model, LoginUser user) {
         model.addAttribute("portaltype", "purchase");
 
        String result= loginService.login(user);

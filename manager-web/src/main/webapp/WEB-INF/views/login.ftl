@@ -116,7 +116,7 @@ html,body {
 			</div>
 			<div class="login-content ">
 			<div class="form">
-			<form   method="post" action="/login">
+			<form id="loginform"   method="post" >
 				<div class="form-group">
 					<div class="col-xs-12  ">
 						<div class="input-group">
@@ -135,7 +135,7 @@ html,body {
 				</div>
 				<div class="form-group form-actions">
 					<div class="col-xs-4 col-xs-offset-4 ">
-						<button type="submit"  id="logon" class="btn btn-sm btn-info"><span class="glyphicon glyphicon-off"></span> 登录</button>
+						<button type="button"  onclick="submitForm()" id="logon" class="btn btn-sm btn-info"><span class="glyphicon glyphicon-off"></span> 登录</button>
 					</div>
 				</div>
 
@@ -154,9 +154,44 @@ html,body {
 		window.ctx = {};
 		window.ctx.cdn = "${cdn}";
 		window.ctx.portal ="${portal}";
+		
+
+
+		function submitForm() {
+//            $.ajax({
+//                url:"/login",
+//                type:"POST",
+//                data:data,
+//                contentType:"application/json",
+//                dataType:"json",
+//
+//                success:function(returnData){
+//
+//					window.location.href="purchase";
+//
+//                    $("#logon").html("登录");
+//                }
+//            });
+
+
+            $('#loginform').ajaxSubmit({
+                url: "/login",
+                dataType: "text/json",
+				type:"POST",
+				data:"",
+                success: function (data) {
+					alert();
+                },
+				complete:function (data) {
+                    window.location.href="home";
+                }
+            });
+        }
+		
 	</script>
     <script src="${cdn}/js/requirejs/require.js"></script>
-
+	<script src="/js/jquery.js"></script>
+	<script src="/js/jquery.form.js"></script>
 </body>
 
 </html>
