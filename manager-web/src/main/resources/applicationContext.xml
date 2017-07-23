@@ -13,12 +13,13 @@
 		<property name="locations">
 			<list>
 				<value>classpath:config.properties</value>
+				<value>classpath:important.properties</value>
 			</list>
 		</property>
 		<property name="systemPropertiesMode"
 				  value="#{T(org.springframework.beans.factory.config.PropertyPlaceholderConfigurer).SYSTEM_PROPERTIES_MODE_OVERRIDE}"/>
 	</bean>
 
-
+	<import resource="classpath*:spring-config-datasource-dbcp.xml" />
 
 </beans>

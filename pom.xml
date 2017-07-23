@@ -10,9 +10,10 @@
     <modules>
         <module>manager-web</module>
         <module>manager-domain</module>
-        <module>manager-dao</module>
         <module>manager-service</module>
+        <module>common-utils</module>
     </modules>
+
     <packaging>pom</packaging>
     <properties>
         <spring.version>4.0.5.RELEASE</spring.version>

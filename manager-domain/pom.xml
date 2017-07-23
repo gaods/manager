@@ -11,5 +11,8 @@
 
     <artifactId>manager-domain</artifactId>
 
+<dependencies>
+
+</dependencies>
 
 </project>

@@ -21,11 +21,7 @@
     </dependency>
 
 
-    <dependency>
-        <groupId>com.gao.manager</groupId>
-        <artifactId>manager-dao</artifactId>
-        <version>1.0-SNAPSHOT</version>
-    </dependency>
+
     <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-core</artifactId>
@@ -61,7 +57,11 @@
         <artifactId>spring-test</artifactId>
         <version>${spring.version}</version>
     </dependency>
-
+    <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-jdbc</artifactId>
+        <version>${spring.version}</version>
+    </dependency>
     <!-- connection pool -->
     <dependency>
         <groupId>org.apache.tomcat</groupId>
