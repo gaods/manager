@@ -9,8 +9,7 @@
 	<!-- 启用360浏览器的极速模式(webkit) -->
 	<meta name="renderer" content="webkit">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="keywords" content="云采 云彩  友云采  云采购 采购 供应商">
-	<meta name="description" content="云采 云彩  友云采  云采购 采购 供应商">
+	<meta name="keywords" content="">
 	<meta http-equiv="Cache-Control" CONTENT="no-cache">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 

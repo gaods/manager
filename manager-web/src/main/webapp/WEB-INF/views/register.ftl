@@ -5,7 +5,7 @@
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>友云采 | 注册</title>
+    <title>注册</title>
     <link href="${cdn}/css/bootstrap.min.css" rel="stylesheet">
     <link href="${cdn}/font-awesome/css/font-awesome.css" rel="stylesheet">
 
@@ -58,6 +58,7 @@
                     <label class="col-md-3 col-xs-4 control-label text-right"><span class="price-color">*</span>密码：&nbsp;</label>
 
                     <div class="col-md-5 col-xs-6 ivalidate padding4">
+                        <input id="password" type="password" class="form-control infon-input regpassword1" placeholder="请设置密码（至少6位）" data-bind="{value:user.pwd}">
 
                         <label class="tips"></label>
                     </div>
@@ -77,6 +78,7 @@
                     <label class="col-md-3 col-xs-4 control-label text-right"><span class="price-color">*</span>确认密码：&nbsp;</label>
 
                     <div class="col-md-5 col-xs-6 ivalidate padding4">
+                        <input id="password" type="password" class="form-control infon-input regpassword1" placeholder="请设置密码（至少6位）" data-bind="{value:user.pwd}">
 
                         <label class="tips"></label>
                     </div>
@@ -98,6 +100,7 @@
 
                     <div class="col-md-5  col-xs-6 padding4">
 
+                        <input id="telno" type="text" class="form-control infon-input" placeholder="可用于登录或找回密码" data-bind="{value:user.telno}">
 
                         <label class="tips"></label>
                     </div>
