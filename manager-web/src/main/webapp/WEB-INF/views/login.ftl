@@ -143,7 +143,7 @@ html,body {
                 </p>
                 <div class="clearfix"></div>
 			</form>
-
+			<div id="msg"></div>
 
 			</div>
 		</div>
@@ -157,21 +157,6 @@ html,body {
 
 
 		function submitForm() {
-//            $.ajax({
-//                url:"/login",
-//                type:"POST",
-//                data:data,
-//                contentType:"application/json",
-//                dataType:"json",
-//
-//                success:function(returnData){
-//
-//					window.location.href="purchase";
-//
-//                    $("#logon").html("登录");
-//                }
-//            });
-
 
             $('#loginform').ajaxSubmit({
                 url: "/login",
@@ -182,7 +167,19 @@ html,body {
 					alert();
                 },
 				complete:function (data) {
-                    window.location.href="home";
+
+					if(data){
+						var resp= JSON.parse(data.responseText);
+
+						if(resp.issuccess=="true"){
+                            window.location.href="home";
+						}else{
+							$("#msg").html("<span>"+resp.msg+"</span>");
+						}
+
+					}
+
+
                 }
             });
         }

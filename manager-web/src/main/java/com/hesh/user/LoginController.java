@@ -3,6 +3,7 @@ package com.hesh.user;
 import com.hesh.service.LoginService;
 
 import com.hesh.web.vo.LoginUser;
+import com.hesh.web.vo.MsgVo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,11 +34,11 @@ public class LoginController {
     }
 
     @RequestMapping(method = RequestMethod.POST,value = "login")
-    public @ResponseBody  String login(ModelMap model, LoginUser user) {
+    public @ResponseBody  MsgVo login(ModelMap model, LoginUser user) {
         model.addAttribute("portaltype", "purchase");
 
-       String result= loginService.login(user);
-        return "home";
+        MsgVo result= loginService.login(user);
+        return result;
     }
 
 }
