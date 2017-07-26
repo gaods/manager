@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yonyou.yuncai.cpu.model.mapper.PhoneUserMapper">
+
+	<!--实体映射-->
+	<resultMap id="phoneUser" type="com.hesh.vo.user.PhoneUser">
+		<!--主键-->
+		<id property="id" column="id" />
+		<!--账号-->
+		<result property="cuPhone" column="cuPhone" jdbcType="VARCHAR" />
+		<!--密码-->
+		<result property="cuPassword" column="cuPassword" jdbcType="VARCHAR" />
+		<!--绑定业务员编号-->
+		<result property="userPin" column="userPin" jdbcType="VARCHAR" />
+		<!--登录人Id-->
+		<result property="opUserId" column="opUserId" jdbcType="VARCHAR" />
+		<!--删除标识0是1否-->
+		<result property="opFlag" column="opFlag" jdbcType="INTEGER" />
+	</resultMap>
+
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+		 id,	cuPhone,	cuPassword,	userPin,	opUserId,	opFlag
+	</sql>
+
+	<!--查询条件-->
+	<sql id="sqlCondition">
+			<if test="id != null">
+				 and id= #{id}
+			</if>
+			<if test="cuPhone != null">
+				 and cuPhone= #{cuPhone}
+			</if>
+			<if test="cuPassword != null">
+				 and cuPassword= #{cuPassword}
+			</if>
+			<if test="userPin != null">
+				 and userPin= #{userPin}
+			</if>
+			<if test="opUserId != null">
+				 and opUserId= #{opUserId}
+			</if>
+			<if test="opFlag != null">
+				 and opFlag= #{opFlag}
+			</if>
+
+	</sql>
+
+	<!--分页获取数据(开始)  -->
+	<select id="getphoneUserCount" resultType="java.lang.Long">
+		 SELECT
+		count(0)
+		 FROM pa_phone_user
+		 WHERE dr=0 
+		<include refid="sqlCondition"/>
+	</select>
+
+	<!--分页获取数据(开始)  -->
+	<select id="selectphoneUser" resultType="com.hesh.vo.user.PhoneUser">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM pa_phone_user
+		 WHERE dr=0 
+		<include refid="sqlCondition"/>
+		 <include refid="com.yonyou.cpu.commons.dao.CommonMapper.pagingLimit"/>	</select>
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectById" resultType="com.hesh.vo.user.PhoneUser" parameterType="java.lang.Integer">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM pa_phone_user
+		 WHERE id = #{id}
+	</select>
+
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		 DELETE FROM pa_phone_user
+		 WHERE id = #{id}
+	</delete>
+
+	<!-- 添加 -->
+	<insert id="insertpa_phone_user" parameterType="com.hesh.vo.user.PhoneUser">
+		 INSERT INTO pa_phone_user
+ 		(id,cuPhone,cuPassword,userPin,opUserId,opFlag) 
+		 VALUES 
+ 		(#{id},#{cuPhone},#{cuPassword},#{userPin},#{opUserId},#{opFlag}) 
+	</insert>
+
+	<!-- 添加 （匹配有值的字段）-->
+	<insert id="insertSelective" parameterType="com.hesh.vo.user.PhoneUser">
+		 INSERT INTO pa_phone_user
+		 <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="id != null">
+				 id,
+			</if>
+			<if test="cuPhone != null">
+				 cuPhone,
+			</if>
+			<if test="cuPassword != null">
+				 cuPassword,
+			</if>
+			<if test="userPin != null">
+				 userPin,
+			</if>
+			<if test="opUserId != null">
+				 opUserId,
+			</if>
+			<if test="opFlag != null">
+				 opFlag
+			</if>
+
+		 </trim>
+		 <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id!=null">
+				 #{id},
+			</if>
+			<if test="cuPhone!=null">
+				 #{cuPhone},
+			</if>
+			<if test="cuPassword!=null">
+				 #{cuPassword},
+			</if>
+			<if test="userPin!=null">
+				 #{userPin},
+			</if>
+			<if test="opUserId!=null">
+				 #{opUserId},
+			</if>
+			<if test="opFlag!=null">
+				 #{opFlag}
+			</if>
+		 </trim>
+	</insert>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKeySelective" parameterType="com.hesh.vo.user.PhoneUser">
+		 UPDATE pa_phone_user
+ 		 <set> 
+			<if test="cuPhone != null">
+				 cuPhone = #{cuPhone},
+			</if>
+			<if test="cuPassword != null">
+				 cuPassword = #{cuPassword},
+			</if>
+			<if test="userPin != null">
+				 userPin = #{userPin},
+			</if>
+			<if test="opUserId != null">
+				 opUserId = #{opUserId},
+			</if>
+			<if test="opFlag != null">
+				 opFlag = #{opFlag}
+			</if>
+
+ 		 </set>
+		 WHERE id = #{id}
+	</update>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKey" parameterType="com.hesh.vo.user.PhoneUser">
+		 UPDATE pa_phone_user
+		 SET 
+			 cuPhone = #{cuPhone},
+			 cuPassword = #{cuPassword},
+			 userPin = #{userPin},
+			 opUserId = #{opUserId},
+			 opFlag = #{opFlag}
+		 WHERE id = #{id}
+	</update>
+
+</mapper>

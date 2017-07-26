@@ -1,22 +1,172 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.hesh.dao.UserMapper">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yonyou.yuncai.cpu.model.mapper.UserMapper">
 
-    <resultMap id="BaseResultMap" type="com.hesh.vo.user.UserVO" >
-        <result column="user_name" property="userName" jdbcType="VARCHAR" />
-        <result column="password" property="password" jdbcType="VARCHAR" />
+	<!--实体映射-->
+	<resultMap id="user" type="com.hesh.vo.user.User">
+		<!--主键-->
+		<id property="id" column="id" />
+		<!--账号-->
+		<result property="userName" column="userName" jdbcType="VARCHAR" />
+		<!--密码-->
+		<result property="userPassword" column="userPassword" jdbcType="VARCHAR" />
+		<!--动态验证码-->
+		<result property="dynamicCode" column="dynamicCode" jdbcType="VARCHAR" />
+		<!--标识主要区别是否为管理员01-->
+		<result property="flag" column="flag" jdbcType="INTEGER" />
+		<!--删除标识0是1否-->
+		<result property="opFlag" column="opFlag" jdbcType="INTEGER" />
+	</resultMap>
 
-    </resultMap>
 
-    <sql id="Base_Column_List" >
-        user_name,password
-    </sql>
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+		 id,	userName,	userPassword,	dynamicCode,	flag,	opFlag
+	</sql>
 
-    <select id="selectByLoginName" resultMap="BaseResultMap" parameterType="java.lang.String" >
-        select
-        <include refid="Base_Column_List" />
-        from hs_user
-        where user_name = #{userName,jdbcType=VARCHAR}
-    </select>
+	<!--查询条件-->
+	<sql id="sqlCondition">
+			<if test="id != null">
+				 and id= #{id}
+			</if>
+			<if test="userName != null">
+				 and userName= #{userName}
+			</if>
+			<if test="userPassword != null">
+				 and userPassword= #{userPassword}
+			</if>
+			<if test="dynamicCode != null">
+				 and dynamicCode= #{dynamicCode}
+			</if>
+			<if test="flag != null">
+				 and flag= #{flag}
+			</if>
+			<if test="opFlag != null">
+				 and opFlag= #{opFlag}
+			</if>
+
+	</sql>
+
+	<!--分页获取数据(开始)  -->
+	<select id="getuserCount" resultType="java.lang.Long">
+		 SELECT
+		count(0)
+		 FROM pa_user
+		 WHERE dr=0 
+		<include refid="sqlCondition"/>
+	</select>
+
+	<!--分页获取数据(开始)  -->
+	<select id="selectuser" resultType="user">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM pa_user
+		 WHERE dr=0 
+		<include refid="sqlCondition"/></select>
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectById" resultType="com.hesh.vo.user.User" parameterType="java.lang.Integer">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM pa_user
+		 WHERE id = #{id}
+	</select>
+
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		 DELETE FROM pa_user
+		 WHERE id = #{id}
+	</delete>
+
+	<!-- 添加 -->
+	<insert id="insertpa_user" parameterType="com.hesh.vo.user.User">
+		 INSERT INTO pa_user
+ 		(id,userName,userPassword,dynamicCode,flag,opFlag) 
+		 VALUES 
+ 		(#{id},#{userName},#{userPassword},#{dynamicCode},#{flag},#{opFlag}) 
+	</insert>
+
+	<!-- 添加 （匹配有值的字段）-->
+	<insert id="insertSelective" parameterType="com.hesh.vo.user.User">
+		 INSERT INTO pa_user
+		 <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="id != null">
+				 id,
+			</if>
+			<if test="userName != null">
+				 userName,
+			</if>
+			<if test="userPassword != null">
+				 userPassword,
+			</if>
+			<if test="dynamicCode != null">
+				 dynamicCode,
+			</if>
+			<if test="flag != null">
+				 flag,
+			</if>
+			<if test="opFlag != null">
+				 opFlag
+			</if>
+
+		 </trim>
+		 <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id!=null">
+				 #{id},
+			</if>
+			<if test="userName!=null">
+				 #{userName},
+			</if>
+			<if test="userPassword!=null">
+				 #{userPassword},
+			</if>
+			<if test="dynamicCode!=null">
+				 #{dynamicCode},
+			</if>
+			<if test="flag!=null">
+				 #{flag},
+			</if>
+			<if test="opFlag!=null">
+				 #{opFlag}
+			</if>
+		 </trim>
+	</insert>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKeySelective" parameterType="com.hesh.vo.user.User">
+		 UPDATE pa_user
+ 		 <set> 
+			<if test="userName != null">
+				 userName = #{userName},
+			</if>
+			<if test="userPassword != null">
+				 userPassword = #{userPassword},
+			</if>
+			<if test="dynamicCode != null">
+				 dynamicCode = #{dynamicCode},
+			</if>
+			<if test="flag != null">
+				 flag = #{flag},
+			</if>
+			<if test="opFlag != null">
+				 opFlag = #{opFlag}
+			</if>
+
+ 		 </set>
+		 WHERE id = #{id}
+	</update>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKey" parameterType="com.hesh.vo.user.User">
+		 UPDATE pa_user
+		 SET 
+			 userName = #{userName},
+			 userPassword = #{userPassword},
+			 dynamicCode = #{dynamicCode},
+			 flag = #{flag},
+			 opFlag = #{opFlag}
+		 WHERE id = #{id}
+	</update>
 
 </mapper>
