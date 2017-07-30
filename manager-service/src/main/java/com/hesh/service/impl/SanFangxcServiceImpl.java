@@ -60,7 +60,32 @@ public class SanFangxcServiceImpl implements SanFangxcService {
 
                  }
             }
+          //  ppMap.put("passWord",paPassWord);
+            return ppMap;
 
+        }
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    /**
+     * 释放号码
+     * @param map
+     * @return
+     */
+    @Override
+    public Map<String, Object> getSfNumber(Map<String, Object> map) {
+        if(null!=map && null!=map.get("hm")){
+            Map<String, Object> ppMap = new HashMap<String, Object>();
+            String xmid = "";
+            String token = "";
+            String hm = "";
+            String url = "http://www.xingchenma.com:9180/service.asmx/sfHmStr?token="+token+"&hm="+hm;
+            String yzNum = HttpClientUtil.httpGetRequest(url);
+            if(null!=yzNum&&!("").equals(yzNum)){
+                 if(("1").equals(yzNum)){
+
+                 }
+            }
           //  ppMap.put("passWord",paPassWord);
             return ppMap;
 
