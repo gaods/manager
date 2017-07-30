@@ -25,7 +25,7 @@ public class Customer  implements Serializable{
     private String pastate;
 
     /**状态**/
-    private String state;
+    private Integer ssCount;
 
     /**创建人**/
     private String creater;
@@ -73,12 +73,12 @@ public class Customer  implements Serializable{
         return this.pastate;
     }
 
-    public void setState(String state){
-        this.state = state;
+    public void setState(Integer state){
+        this.ssCount = state;
     }
 
-    public String getState(){
-        return this.state;
+    public Integer getState(){
+        return this.ssCount;
     }
 
     public void setCreater(String creater){

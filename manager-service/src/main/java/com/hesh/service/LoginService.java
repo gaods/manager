@@ -58,4 +58,11 @@ public class LoginService {
         return false;
     }
 
+    public List<Customer> getCusomerlist(){
+
+
+        return customerMapper.selectcustomer();
+
+    }
+
 }

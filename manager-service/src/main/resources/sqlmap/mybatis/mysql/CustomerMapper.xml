@@ -14,7 +14,7 @@
 		<!--标识（0未开始，1完成，2删除，3未完成）-->
 		<result property="pastate" column="pastate" jdbcType="VARCHAR" />
 		<!--状态-->
-		<result property="state" column="state" jdbcType="VARCHAR" />
+		<result property="ssCount" column="ssCount" jdbcType="INTEGER" />
 		<!--创建人-->
 		<result property="creater" column="creater" jdbcType="VARCHAR" />
 		<!--创建时间-->
@@ -28,7 +28,7 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		 id,	pnCode,	zcCount,	pastate,	state,	creater,	creatTime,	modifiter,	modifyTime
+		 id,	pnCode,	zcCount,	pastate,	ssCount,	creater,	creatTime,	modifiter,	modifyTime
 	</sql>
 
 	<!--查询条件-->
@@ -45,8 +45,8 @@
 			<if test="pastate != null">
 				 and pastate= #{pastate}
 			</if>
-			<if test="state != null">
-				 and state= #{state}
+			<if test="ssCount != null">
+				 and ssCount= #{ssCount}
 			</if>
 			<if test="creater != null">
 				 and creater= #{creater}
@@ -98,9 +98,9 @@
 	<!-- 添加 -->
 	<insert id="insertcustomer" parameterType="com.hesh.vo.user.Customer">
 		 INSERT INTO pa_customer
- 		(id,pnCode,zcCount,pastate,state,creater,creatTime,modifiter,modifyTime) 
+ 		(id,pnCode,zcCount,pastate,ssCount,creater,creatTime,modifiter,modifyTime)
 		 VALUES 
- 		(#{id},#{pnCode},#{zcCount},#{pastate},#{state},#{creater},#{creatTime},#{modifiter},#{modifyTime}) 
+ 		(#{id},#{pnCode},#{zcCount},#{pastate},#{ssCount},#{creater},#{creatTime},#{modifiter},#{modifyTime})
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
@@ -119,8 +119,8 @@
 			<if test="pastate != null">
 				 pastate,
 			</if>
-			<if test="state != null">
-				 state,
+			<if test="ssCount != null">
+				ssCount,
 			</if>
 			<if test="creater != null">
 				 creater,
@@ -149,8 +149,8 @@
 			<if test="pastate!=null">
 				 #{pastate},
 			</if>
-			<if test="state!=null">
-				 #{state},
+			<if test="ssCount!=null">
+				 #{ssCount},
 			</if>
 			<if test="creater!=null">
 				 #{creater},
@@ -180,8 +180,8 @@
 			<if test="pastate != null">
 				 pastate = #{pastate},
 			</if>
-			<if test="state != null">
-				 state = #{state},
+			<if test="ssCount != null">
+				ssCount = #{ssCount},
 			</if>
 			<if test="creater != null">
 				 creater = #{creater},
@@ -207,7 +207,7 @@
 			 pnCode = #{pnCode},
 			 zcCount = #{zcCount},
 			 pastate = #{pastate},
-			 state = #{state},
+			 ssCount = #{ssCount},
 			 creater = #{creater},
 			 creatTime = #{creatTime},
 			 modifiter = #{modifiter},

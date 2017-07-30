@@ -9,6 +9,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -36,10 +37,15 @@ public class AdminController {
     }
 
     @RequestMapping("userlist")
-    public String userlist(){
+    public ModelAndView userlist(ModelMap model){
+        List<Customer> customers= loginService.getCusomerlist();
+
+        model.addAttribute("customers",customers);
 
 
-        return "userlist";
+        ModelAndView mv = new ModelAndView("userlist");
+        mv.addObject("customers",customers);
+        return  mv;
     }
 
 
@@ -49,7 +55,7 @@ public class AdminController {
 
         List<Customer> customers=  JsonUtils.fromJsonArray(formdata,Customer.class);
 
-        loginService.saveCustomer(customers);
+        boolean issave=loginService.saveCustomer(customers);
 
         return "";
     }

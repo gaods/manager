@@ -10,4 +10,6 @@ import java.util.List;
 public interface CustomerMapper {
 
     public int insertcustomer(Customer customerlist);
+
+    List<Customer> selectcustomer();
 }
