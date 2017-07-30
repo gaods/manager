@@ -46,7 +46,7 @@
 
                                 <li>
                                     <a href="javascript:void(0);" onclick="OpenTab(this);" titile=""
-                                       rel="/admin/userlist">用户管理</a>
+                                       rel="/admin/userlist">客户经理管理</a>
                                 </li>
 
                             </ul>

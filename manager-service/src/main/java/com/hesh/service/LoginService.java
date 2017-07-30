@@ -1,7 +1,9 @@
 package com.hesh.service;
 
+import com.hesh.dao.CustomerMapper;
 import com.hesh.dao.UserDao;
 import com.hesh.dao.UserMapper;
+import com.hesh.vo.user.Customer;
 import com.hesh.vo.user.UserVO;
 import com.hesh.web.vo.LoginUser;
 import com.hesh.web.vo.MsgVo;
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * Created by gaods on 2017/7/23.
@@ -21,6 +24,9 @@ public class LoginService {
 
     @Resource
     UserMapper userMapper;
+
+    @Resource
+    CustomerMapper customerMapper;
 
     public MsgVo login(LoginUser user){
 
@@ -42,6 +48,14 @@ public class LoginService {
         msgVo.setIssuccess("true");
         msgVo.setMsg("登陆成功");
         return msgVo;
+    }
+
+    public boolean   saveCustomer(List<Customer> customerlist){
+        for(Customer customer:customerlist){
+            customerMapper.insertcustomer(customer);
+        }
+
+        return false;
     }
 
 }

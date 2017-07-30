@@ -139,7 +139,7 @@ html,body {
 				</div>
 
                 <p class="text-muted text-center pull-left m-t">
-                    <small>还没有账号?</small><i class="fa fa-right"></i><a href="register">注册账号</a>
+                    <small>还没有账号?</small><i class="fa fa-right"></i><a href="/admin/register">注册账号</a>
                 </p>
                 <div class="clearfix"></div>
 			</form>

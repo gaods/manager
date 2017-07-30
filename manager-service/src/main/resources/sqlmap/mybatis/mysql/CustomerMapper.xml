@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hesh.dao.CustomerMapper">
+
+	<!--实体映射-->
+	<resultMap id="customer" type="com.hesh.vo.user.Customer">
+		<!--自增ID-->
+		<id property="id" column="id" />
+		<!--客户经理工号-->
+		<result property="pnCode" column="pnCode" jdbcType="VARCHAR" />
+		<!--注册数量-->
+		<result property="zcCount" column="zcCount" jdbcType="INTEGER" />
+		<!--标识（0未开始，1完成，2删除，3未完成）-->
+		<result property="pastate" column="pastate" jdbcType="VARCHAR" />
+		<!--状态-->
+		<result property="state" column="state" jdbcType="VARCHAR" />
+		<!--创建人-->
+		<result property="creater" column="creater" jdbcType="VARCHAR" />
+		<!--创建时间-->
+		<result property="creatTime" column="creatTime" jdbcType="DATE" />
+		<!--修改人-->
+		<result property="modifiter" column="modifiter" jdbcType="VARCHAR" />
+		<!--修改时间-->
+		<result property="modifyTime" column="modifyTime" jdbcType="DATE" />
+	</resultMap>
+
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+		 id,	pnCode,	zcCount,	pastate,	state,	creater,	creatTime,	modifiter,	modifyTime
+	</sql>
+
+	<!--查询条件-->
+	<sql id="sqlCondition">
+			<if test="id != null">
+				 and id= #{id}
+			</if>
+			<if test="pnCode != null">
+				 and pnCode= #{pnCode}
+			</if>
+			<if test="zcCount != null">
+				 and zcCount= #{zcCount}
+			</if>
+			<if test="pastate != null">
+				 and pastate= #{pastate}
+			</if>
+			<if test="state != null">
+				 and state= #{state}
+			</if>
+			<if test="creater != null">
+				 and creater= #{creater}
+			</if>
+			<if test="creatTime != null">
+				 and creatTime= #{creatTime}
+			</if>
+			<if test="modifiter != null">
+				 and modifiter= #{modifiter}
+			</if>
+			<if test="modifyTime != null">
+				 and modifyTime= #{modifyTime}
+			</if>
+
+	</sql>
+
+	<!--分页获取数据(开始)  -->
+	<select id="getcustomerCount" resultType="java.lang.Long">
+		 SELECT
+		count(0)
+		 FROM pa_customer
+		 WHERE dr=0 
+		<include refid="sqlCondition"/>
+	</select>
+
+	<!--分页获取数据(开始)  -->
+	<select id="selectcustomer" resultType="customer">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM pa_customer
+		 WHERE dr=0 
+		<include refid="sqlCondition"/>
+		 	</select>
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectById" resultType="customer" parameterType="java.lang.Integer">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM pa_customer
+		 WHERE id = #{id}
+	</select>
+
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		 DELETE FROM pa_customer
+		 WHERE id = #{id}
+	</delete>
+
+	<!-- 添加 -->
+	<insert id="insertcustomer" parameterType="com.hesh.vo.user.Customer">
+		 INSERT INTO pa_customer
+ 		(id,pnCode,zcCount,pastate,state,creater,creatTime,modifiter,modifyTime) 
+		 VALUES 
+ 		(#{id},#{pnCode},#{zcCount},#{pastate},#{state},#{creater},#{creatTime},#{modifiter},#{modifyTime}) 
+	</insert>
+
+	<!-- 添加 （匹配有值的字段）-->
+	<insert id="insertSelective" parameterType="com.hesh.vo.user.Customer">
+		 INSERT INTO pa_customer
+		 <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="id != null">
+				 id,
+			</if>
+			<if test="pnCode != null">
+				 pnCode,
+			</if>
+			<if test="zcCount != null">
+				 zcCount,
+			</if>
+			<if test="pastate != null">
+				 pastate,
+			</if>
+			<if test="state != null">
+				 state,
+			</if>
+			<if test="creater != null">
+				 creater,
+			</if>
+			<if test="creatTime != null">
+				 creatTime,
+			</if>
+			<if test="modifiter != null">
+				 modifiter,
+			</if>
+			<if test="modifyTime != null">
+				 modifyTime
+			</if>
+
+		 </trim>
+		 <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id!=null">
+				 #{id},
+			</if>
+			<if test="pnCode!=null">
+				 #{pnCode},
+			</if>
+			<if test="zcCount!=null">
+				 #{zcCount},
+			</if>
+			<if test="pastate!=null">
+				 #{pastate},
+			</if>
+			<if test="state!=null">
+				 #{state},
+			</if>
+			<if test="creater!=null">
+				 #{creater},
+			</if>
+			<if test="creatTime!=null">
+				 #{creatTime},
+			</if>
+			<if test="modifiter!=null">
+				 #{modifiter},
+			</if>
+			<if test="modifyTime!=null">
+				 #{modifyTime}
+			</if>
+		 </trim>
+	</insert>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKeySelective" parameterType="com.hesh.vo.user.Customer">
+		 UPDATE pa_customer
+ 		 <set> 
+			<if test="pnCode != null">
+				 pnCode = #{pnCode},
+			</if>
+			<if test="zcCount != null">
+				 zcCount = #{zcCount},
+			</if>
+			<if test="pastate != null">
+				 pastate = #{pastate},
+			</if>
+			<if test="state != null">
+				 state = #{state},
+			</if>
+			<if test="creater != null">
+				 creater = #{creater},
+			</if>
+			<if test="creatTime != null">
+				 creatTime = #{creatTime},
+			</if>
+			<if test="modifiter != null">
+				 modifiter = #{modifiter},
+			</if>
+			<if test="modifyTime != null">
+				 modifyTime = #{modifyTime}
+			</if>
+
+ 		 </set>
+		 WHERE id = #{id}
+	</update>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKey" parameterType="com.hesh.vo.user.Customer">
+		 UPDATE pa_customer
+		 SET 
+			 pnCode = #{pnCode},
+			 zcCount = #{zcCount},
+			 pastate = #{pastate},
+			 state = #{state},
+			 creater = #{creater},
+			 creatTime = #{creatTime},
+			 modifiter = #{modifiter},
+			 modifyTime = #{modifyTime}
+		 WHERE id = #{id}
+	</update>
+
+</mapper>
