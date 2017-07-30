@@ -1,7 +1,7 @@
 package com.hesh.service.impl;
 
 import com.hesh.service.SanFangxcService;
-import com.hesheng.utils.GetRandomNumber;
+//import com.hesheng.utils.GetRandomNumber;
 import com.hesheng.utils.HttpClientUtil;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +33,8 @@ public class SanFangxcServiceImpl implements SanFangxcService {
             String sl = "";
             String url = "http://www.xingchenma.com:9180/service.asmx/GetHMStr?token=132A49069398917D4C666B1BA77242C8&xmid=200&sl=1&lx=0&a1=&a2=&pk=";
             String paPhone  = HttpClientUtil.httpGetRequest(url);
-            String paPassWord = GetRandomNumber.generateLowerString(8);
+            String paPassWord = "";
+                    //GetRandomNumber.generateLowerString(8);
             ppMap.put("phoneNumber",paPhone);
             ppMap.put("passWord",paPassWord);
             return ppMap;

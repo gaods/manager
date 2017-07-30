@@ -34,11 +34,20 @@
     </tr>
     </thead>
     <tbody id="userdata">
-
+<#if customers?exists>
+    <#list customers as user>
+        <input type=\"hidden\"  name=\"id\" value=\"\">
+        <tr>
+            <td>${user.pnCode}</td>
+            <td>${user.zcCount}</td>
+            <td>${user.pnCode}</td>
+            <td>${user.pnCode}</td>
+        </tr>
+        </#list>
+</#if>
     </tbody>
 </table>
 </form>
-<div><button type="button" class="btn btn-primary" onclick="javascript:saveuser()">保存</button></div>
 
 </body>
 </html>
