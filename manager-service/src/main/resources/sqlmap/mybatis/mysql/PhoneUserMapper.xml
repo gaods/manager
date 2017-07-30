@@ -63,8 +63,7 @@
 		 <include refid="Base_Column_List" />
 		 FROM pa_phone_user
 		 WHERE dr=0 
-		<include refid="sqlCondition"/>
-		 <include refid="com.yonyou.cpu.commons.dao.CommonMapper.pagingLimit"/>	</select>
+		<include refid="sqlCondition"/></select>
 
 	<!-- 查询（根据主键ID查询） -->
 	<select id="selectById" resultType="com.hesh.vo.user.PhoneUser" parameterType="java.lang.Integer">

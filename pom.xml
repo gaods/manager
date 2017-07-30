@@ -12,6 +12,7 @@
         <module>manager-domain</module>
         <module>manager-service</module>
         <module>common-utils</module>
+        <module>manager-utils</module>
     </modules>
 
     <packaging>pom</packaging>
@@ -23,7 +24,9 @@
         <mybatis-spring.version>1.2.3</mybatis-spring.version>
         <mybatis.version>3.3.1</mybatis.version>
         <tomcat-jdbc.version>7.0.53</tomcat-jdbc.version>
-
+        <servlet-api.version>2.5</servlet-api.version>
+        <jsp.version>2.0</jsp.version>
+        <shiro.version>1.2.4</shiro.version>
     </properties>
 
 
