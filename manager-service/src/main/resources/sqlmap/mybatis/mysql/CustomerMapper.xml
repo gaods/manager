@@ -77,7 +77,7 @@
 		 SELECT
 		 <include refid="Base_Column_List" />
 		 FROM pa_customer
-		 WHERE dr=0 
+		 WHERE dr=0
 		<include refid="sqlCondition"/>
 		 	</select>
 
@@ -98,9 +98,9 @@
 	<!-- 添加 -->
 	<insert id="insertcustomer" parameterType="com.hesh.vo.user.Customer">
 		 INSERT INTO pa_customer
- 		(id,pnCode,zcCount,pastate,ssCount,creater,creatTime,modifiter,modifyTime)
+ 		(id,pnCode,zcCount,pastate,ssCount,creater,creatTime,modifiter,modifyTime,dr)
 		 VALUES 
- 		(#{id},#{pnCode},#{zcCount},#{pastate},#{ssCount},#{creater},#{creatTime},#{modifiter},#{modifyTime})
+ 		(#{id},#{pnCode},#{zcCount},#{pastate},#{ssCount},#{creater},#{creatTime},#{modifiter},#{modifyTime},0)
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->

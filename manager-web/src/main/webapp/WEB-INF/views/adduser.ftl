@@ -70,16 +70,19 @@
 
             $.ajax({
                 url: "/admin/saveuser",
-                dataType: "text/json",
+                //dataType: "text/json",
                 contentType:"application/json",
                 type:"POST",
                 data: JSON.stringify(data),
-                success: function (data) {
-                    alert();
-                },
-                complete:function (data) {
+                success: function (data,textStatus) {
+                   // alert(data);
+                   var temp1= JSON.parse(data);
+                    if(temp1){
+                        if(temp1.status==1){
+                            $("#msg").html("保存成功");
+                        }
 
-
+                    }
                 }
             });
 
@@ -106,7 +109,9 @@
         </tbody>
     </table>
 </form>
-<div><button type="button" class="btn btn-primary" onclick="javascript:saveuser()">保存</button></div>
+<div><button type="button" class="btn btn-primary" onclick="javascript:saveuser()">保存</button>
+<span id="msg"></span>
+</div>
 
 </body>
 </html>

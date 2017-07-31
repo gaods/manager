@@ -55,7 +55,7 @@ public class LoginService {
             customerMapper.insertcustomer(customer);
         }
 
-        return false;
+        return true;
     }
 
     public List<Customer> getCusomerlist(){

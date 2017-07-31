@@ -34,17 +34,17 @@
     </tr>
     </thead>
     <tbody id="userdata">
-<#if customers?exists>
-    <#list customers as user>
-        <input type=\"hidden\"  name=\"id\" value=\"\">
-        <tr>
-            <td>${user.pnCode}</td>
-            <td>${user.zcCount}</td>
-            <td>${user.pnCode}</td>
-            <td>${user.pnCode}</td>
+    <#if customers?exists>
+        <#list customers as user>
+
+        <tr> <input type="hidden"  name="id" value="">
+            <td>${user.pnCode!""}</td>
+            <td>${user.zcCount!"0"}</td>
+            <td>查看  删除</td>
         </tr>
         </#list>
-</#if>
+    </#if>
+
     </tbody>
 </table>
 </form>
