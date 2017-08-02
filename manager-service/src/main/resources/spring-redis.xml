@@ -24,4 +24,14 @@
     </bean>
 
 
+    <bean id="cacheManager" class="com.hesh.utils.CacheManager">
+        <property name="jedisTemplate" ref="redisTemplate"/>
+        <property name="sessionTimeout" value="86400"/>
+    </bean>
+
+    <bean id="redisclinet" class="com.hesh.utils.RedisClient">
+        <property name="jedisTemplate" ref="redisTemplate" />
+        <property name="sessionTimeout" value="86400" />
+    </bean>
+
 </beans>

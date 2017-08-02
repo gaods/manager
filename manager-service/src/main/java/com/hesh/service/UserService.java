@@ -1,10 +1,6 @@
 package com.hesh.service;
 
-import org.springframework.dao.DataAccessException;
-import org.springframework.data.redis.connection.RedisConnection;
-import org.springframework.data.redis.core.RedisCallback;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.RedisSerializer;
+import com.hesh.utils.RedisClient;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -17,21 +13,11 @@ import javax.annotation.Resource;
 public class UserService {
 
     @Resource
-    RedisTemplate  redisTemplate;
-
+    RedisClient redisClient;
 
 
     public boolean add() {
-        boolean result = (boolean) redisTemplate.execute(new RedisCallback<Boolean>() {
-            public Boolean doInRedis(RedisConnection connection)
-                    throws DataAccessException {
-                RedisSerializer<String> serializer = redisTemplate.getStringSerializer();
-                byte[] key  = serializer.serialize("1");
-                byte[] name = serializer.serialize("2");
-                return connection.setNX(key, name);
-            }
-        });
-        return result;
+       return redisClient.add("2","3");
     }
 
 }
