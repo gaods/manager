@@ -186,7 +186,7 @@ html,body {
 		
 	</script>
     <script src="${cdn}/js/requirejs/require.js"></script>
-	<script src="/js/jquery.js"></script>
+	<script src="/js/admin/jquery.min.js"></script>
 	<script src="/js/jquery.form.js"></script>
 </body>
 

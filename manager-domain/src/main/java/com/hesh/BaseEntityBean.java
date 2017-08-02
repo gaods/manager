@@ -16,7 +16,7 @@ public class BaseEntityBean implements Serializable {
     private String creator;
     private String modifier;
     private Integer dr;
-
+    private Date ts;
 
     public BaseEntityBean() {
     }
@@ -68,12 +68,18 @@ public class BaseEntityBean implements Serializable {
     public void setDr(Integer dr) {
         this.dr = dr;
     }
+    public Date getTs() {
+        return this.ts;
+    }
 
+    public void setTs(Date ts) {
+        this.ts = ts;
+    }
 
     public BaseEntityBean init() {
         this.creator = "";
         this.modifier = "";
-        //this.dr = YNEnum.Y.getCode();
+        this.dr = YNEnum.Y.getCode();
         return this;
     }
 }
