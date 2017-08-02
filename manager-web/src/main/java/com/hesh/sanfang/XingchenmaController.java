@@ -40,10 +40,25 @@ public class XingchenmaController {
         return  JsonUtils.toJson(resultmap);
     }
 
+
+
+    /**
+     * 参数 是登陆名 密码
+     * 获取 token
+     * 然后存起来
+     * @param param
+     * @return
+     */
+
+
+
     @RequestMapping("/getSfNumber")
     public @ResponseBody  String getSfNumber(@RequestBody String param){
+        HashMap parammap=  JsonUtils.fromJson(param, HashMap.class);
+       String token=sanFangxcService.getXingChenToken(parammap);
 
-        Map<String, Object>  resultmap=sanFangxcService.getSfNumber(JsonUtils.fromJson(param, HashMap.class));
+
+        Map<String, Object>  resultmap=sanFangxcService.getSfNumber(parammap);
 
         return  JsonUtils.toJson(resultmap);
     }
@@ -53,6 +68,8 @@ public class XingchenmaController {
     public @ResponseBody  String getXingChenToken(@RequestBody String param){
 
         String result=sanFangxcService.getXingChenToken(JsonUtils.fromJson(param, HashMap.class));
+
+
 
         return  result;
     }

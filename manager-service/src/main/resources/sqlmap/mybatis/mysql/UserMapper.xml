@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.yonyou.yuncai.cpu.model.mapper.UserMapper">
+<mapper namespace="com.hesh.dao.UserMapper">
 
 	<!--实体映射-->
 	<resultMap id="user" type="com.hesh.vo.user.User">
@@ -16,13 +16,13 @@
 		<!--标识主要区别是否为管理员01-->
 		<result property="flag" column="flag" jdbcType="INTEGER" />
 		<!--删除标识0是1否-->
-		<result property="opFlag" column="opFlag" jdbcType="INTEGER" />
+		<result property="dr" column="dr" jdbcType="INTEGER" />
 	</resultMap>
 
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		 id,	userName,	userPassword,	dynamicCode,	flag,	opFlag
+		 id,	userName,	userPassword,	dynamicCode,	flag,	dr
 	</sql>
 
 	<!--查询条件-->
@@ -42,8 +42,8 @@
 			<if test="flag != null">
 				 and flag= #{flag}
 			</if>
-			<if test="opFlag != null">
-				 and opFlag= #{opFlag}
+			<if test="dr != null">
+				 and dr= #{dr}
 			</if>
 
 	</sql>
@@ -82,9 +82,9 @@
 	<!-- 添加 -->
 	<insert id="insertpa_user" parameterType="com.hesh.vo.user.User">
 		 INSERT INTO pa_user
- 		(id,userName,userPassword,dynamicCode,flag,opFlag) 
+ 		(id,userName,userPassword,dynamicCode,flag,dr) 
 		 VALUES 
- 		(#{id},#{userName},#{userPassword},#{dynamicCode},#{flag},#{opFlag}) 
+ 		(#{id},#{userName},#{userPassword},#{dynamicCode},#{flag},#{dr}) 
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
@@ -106,8 +106,8 @@
 			<if test="flag != null">
 				 flag,
 			</if>
-			<if test="opFlag != null">
-				 opFlag
+			<if test="dr != null">
+				 dr
 			</if>
 
 		 </trim>
@@ -127,8 +127,8 @@
 			<if test="flag!=null">
 				 #{flag},
 			</if>
-			<if test="opFlag!=null">
-				 #{opFlag}
+			<if test="dr!=null">
+				 #{dr}
 			</if>
 		 </trim>
 	</insert>
@@ -149,8 +149,8 @@
 			<if test="flag != null">
 				 flag = #{flag},
 			</if>
-			<if test="opFlag != null">
-				 opFlag = #{opFlag}
+			<if test="dr != null">
+				 dr = #{dr}
 			</if>
 
  		 </set>
@@ -165,7 +165,7 @@
 			 userPassword = #{userPassword},
 			 dynamicCode = #{dynamicCode},
 			 flag = #{flag},
-			 opFlag = #{opFlag}
+			 dr = #{dr}
 		 WHERE id = #{id}
 	</update>
 

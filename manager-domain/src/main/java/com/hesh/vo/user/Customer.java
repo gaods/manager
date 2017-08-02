@@ -1,6 +1,8 @@
 package com.hesh.vo.user;
 
 
+import com.hesh.BaseEntityBean;
+
 import java.io.Serializable;
 
 /**
@@ -9,7 +11,7 @@ import java.io.Serializable;
  *
  **/
 @SuppressWarnings("serial")
-public class Customer  implements Serializable{
+public class Customer  extends BaseEntityBean {
 
     private static final long serialVersionUID = 1L;
     /**自增ID**/
@@ -33,11 +35,10 @@ public class Customer  implements Serializable{
     /**创建时间**/
     private java.util.Date creatTime;
 
+
+
     /**修改人**/
     private String modifiter;
-
-    /**修改时间**/
-    private java.util.Date modifyTime;
 
 
 
@@ -105,12 +106,6 @@ public class Customer  implements Serializable{
         return this.modifiter;
     }
 
-    public void setModifyTime(java.util.Date modifyTime){
-        this.modifyTime = modifyTime;
-    }
 
-    public java.util.Date getModifyTime(){
-        return this.modifyTime;
-    }
 
 }

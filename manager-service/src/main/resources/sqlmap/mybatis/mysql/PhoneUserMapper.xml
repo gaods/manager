@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.yonyou.yuncai.cpu.model.mapper.PhoneUserMapper">
+<mapper namespace="com.hesh.dao.PhoneUserMapper">
 
 	<!--实体映射-->
 	<resultMap id="phoneUser" type="com.hesh.vo.user.PhoneUser">
@@ -16,13 +16,14 @@
 		<!--登录人Id-->
 		<result property="opUserId" column="opUserId" jdbcType="VARCHAR" />
 		<!--删除标识0是1否-->
-		<result property="opFlag" column="opFlag" jdbcType="INTEGER" />
+		<result property="customerid" column="customerid" jdbcType="INTEGER" />
+		<result property="dr" column="dr" jdbcType="INTEGER" />
 	</resultMap>
 
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		 id,	cuPhone,	cuPassword,	userPin,	opUserId,	opFlag
+		 id,	cuPhone,	cuPassword,	userPin, customerid,	opUserId,	dr
 	</sql>
 
 	<!--查询条件-->
@@ -42,8 +43,11 @@
 			<if test="opUserId != null">
 				 and opUserId= #{opUserId}
 			</if>
-			<if test="opFlag != null">
-				 and opFlag= #{opFlag}
+			<if test="customerid != null">
+				and customerid= #{customerid}
+			</if>
+			<if test="dr != null">
+				 and dr= #{dr}
 			</if>
 
 	</sql>
@@ -82,9 +86,9 @@
 	<!-- 添加 -->
 	<insert id="insertpa_phone_user" parameterType="com.hesh.vo.user.PhoneUser">
 		 INSERT INTO pa_phone_user
- 		(id,cuPhone,cuPassword,userPin,opUserId,opFlag) 
+ 		(id,cuPhone,cuPassword,userPin,opUserId,customerid,dr)
 		 VALUES 
- 		(#{id},#{cuPhone},#{cuPassword},#{userPin},#{opUserId},#{opFlag}) 
+ 		(#{id},#{cuPhone},#{cuPassword},#{userPin},#{opUserId},#{customerid},#{dr})
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
@@ -106,8 +110,8 @@
 			<if test="opUserId != null">
 				 opUserId,
 			</if>
-			<if test="opFlag != null">
-				 opFlag
+			<if test="dr != null">
+				 dr
 			</if>
 
 		 </trim>
@@ -127,8 +131,8 @@
 			<if test="opUserId!=null">
 				 #{opUserId},
 			</if>
-			<if test="opFlag!=null">
-				 #{opFlag}
+			<if test="dr!=null">
+				 #{dr}
 			</if>
 		 </trim>
 	</insert>
@@ -149,8 +153,8 @@
 			<if test="opUserId != null">
 				 opUserId = #{opUserId},
 			</if>
-			<if test="opFlag != null">
-				 opFlag = #{opFlag}
+			<if test="dr != null">
+				 dr = #{dr}
 			</if>
 
  		 </set>
@@ -165,7 +169,7 @@
 			 cuPassword = #{cuPassword},
 			 userPin = #{userPin},
 			 opUserId = #{opUserId},
-			 opFlag = #{opFlag}
+			 dr = #{dr}
 		 WHERE id = #{id}
 	</update>
 

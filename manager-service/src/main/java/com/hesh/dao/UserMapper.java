@@ -1,6 +1,6 @@
 package com.hesh.dao;
 
-import com.hesh.vo.user.UserVO;
+import com.hesh.vo.user.User;
 
 /**
  * Created by gaods on 2017/7/24.
@@ -8,5 +8,5 @@ import com.hesh.vo.user.UserVO;
 public interface UserMapper {
 
 
-    UserVO selectByLoginName(String userName);
+    User selectuser(User user);
 }

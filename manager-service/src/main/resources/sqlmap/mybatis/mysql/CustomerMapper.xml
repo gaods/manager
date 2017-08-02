@@ -20,7 +20,7 @@
 		<!--创建时间-->
 		<result property="creatTime" column="creatTime" jdbcType="DATE" />
 		<!--修改人-->
-		<result property="modifiter" column="modifiter" jdbcType="VARCHAR" />
+		<result property="modifier" column="modifier" jdbcType="VARCHAR" />
 		<!--修改时间-->
 		<result property="modifyTime" column="modifyTime" jdbcType="DATE" />
 	</resultMap>
@@ -28,7 +28,7 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		 id,	pnCode,	zcCount,	pastate,	ssCount,	creater,	creatTime,	modifiter,	modifyTime
+		 id,	pnCode,	zcCount,	pastate,	ssCount,	creater,	creatTime,	modifier,	modifyTime
 	</sql>
 
 	<!--查询条件-->
@@ -54,8 +54,8 @@
 			<if test="creatTime != null">
 				 and creatTime= #{creatTime}
 			</if>
-			<if test="modifiter != null">
-				 and modifiter= #{modifiter}
+			<if test="modifier != null">
+				 and modifier= #{modifier}
 			</if>
 			<if test="modifyTime != null">
 				 and modifyTime= #{modifyTime}
@@ -90,17 +90,17 @@
 	</select>
 
 	<!--删除：根据主键ID删除-->
-	<delete id="deleteById" parameterType="java.lang.Integer">
-		 DELETE FROM pa_customer
+	<update id="deleteById" parameterType="java.lang.Integer">
+		 UPDATE  pa_customer set dr=1
 		 WHERE id = #{id}
-	</delete>
+	</update>
 
 	<!-- 添加 -->
 	<insert id="insertcustomer" parameterType="com.hesh.vo.user.Customer">
 		 INSERT INTO pa_customer
- 		(id,pnCode,zcCount,pastate,ssCount,creater,creatTime,modifiter,modifyTime,dr)
+ 		(id,pnCode,zcCount,pastate,ssCount,creater,creatTime,modifier,modifyTime,dr)
 		 VALUES 
- 		(#{id},#{pnCode},#{zcCount},#{pastate},#{ssCount},#{creater},#{creatTime},#{modifiter},#{modifyTime},0)
+ 		(#{id},#{pnCode},#{zcCount},#{pastate},#{ssCount},#{creater},#{creatTime},#{modifier},#{modifyTime},0)
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
@@ -128,8 +128,8 @@
 			<if test="creatTime != null">
 				 creatTime,
 			</if>
-			<if test="modifiter != null">
-				 modifiter,
+			<if test="modifier != null">
+				 modifier,
 			</if>
 			<if test="modifyTime != null">
 				 modifyTime
@@ -158,8 +158,8 @@
 			<if test="creatTime!=null">
 				 #{creatTime},
 			</if>
-			<if test="modifiter!=null">
-				 #{modifiter},
+			<if test="modifier!=null">
+				 #{modifier},
 			</if>
 			<if test="modifyTime!=null">
 				 #{modifyTime}
@@ -189,8 +189,8 @@
 			<if test="creatTime != null">
 				 creatTime = #{creatTime},
 			</if>
-			<if test="modifiter != null">
-				 modifiter = #{modifiter},
+			<if test="modifier != null">
+				 modifier = #{modifier},
 			</if>
 			<if test="modifyTime != null">
 				 modifyTime = #{modifyTime}
@@ -210,7 +210,7 @@
 			 ssCount = #{ssCount},
 			 creater = #{creater},
 			 creatTime = #{creatTime},
-			 modifiter = #{modifiter},
+			 modifier = #{modifier},
 			 modifyTime = #{modifyTime}
 		 WHERE id = #{id}
 	</update>

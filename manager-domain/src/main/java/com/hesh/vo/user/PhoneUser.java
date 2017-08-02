@@ -1,6 +1,8 @@
 package com.hesh.vo.user;
 
 
+import com.hesh.BaseEntityBean;
+
 import java.io.Serializable;
 
 /**
@@ -9,7 +11,7 @@ import java.io.Serializable;
  * 
  **/
 @SuppressWarnings("serial")
-  public class PhoneUser implements Serializable {
+  public class PhoneUser extends BaseEntityBean{
 
   private static final long serialVersionUID = 1L;
 	/**主键**/
@@ -28,9 +30,27 @@ import java.io.Serializable;
 	private String opUserId;
 
 	/**删除标识0是1否**/
-	private Integer opFlag;
+	private Integer dr;
 
+	private String token;
 
+	private Integer customerid;
+
+	public Integer getCustomerid() {
+		return customerid;
+	}
+
+	public void setCustomerid(Integer customerid) {
+		this.customerid = customerid;
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
 
 	public void setId(Integer id){
 		this.id = id;
@@ -72,12 +92,12 @@ import java.io.Serializable;
 		return this.opUserId;
 	}
 
-	public void setOpFlag(Integer opFlag){
-		this.opFlag = opFlag;
+	public void setDr(Integer dr){
+		this.dr = dr;
 	}
 
-	public Integer getOpFlag(){
-		return this.opFlag;
+	public Integer getDr(){
+		return this.dr;
 	}
 
 }

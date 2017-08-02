@@ -28,7 +28,7 @@ import java.io.Serializable;
 	private Integer flag;
 
 	/**删除标识0是1否**/
-	private Integer opFlag;
+	private Integer dr;
 
 
 
@@ -72,12 +72,12 @@ import java.io.Serializable;
 		return this.flag;
 	}
 
-	public void setOpFlag(Integer opFlag){
-		this.opFlag = opFlag;
+	public void setDr(Integer dr){
+		this.dr = dr;
 	}
 
-	public Integer getOpFlag(){
-		return this.opFlag;
+	public Integer getDr(){
+		return this.dr;
 	}
 
 }

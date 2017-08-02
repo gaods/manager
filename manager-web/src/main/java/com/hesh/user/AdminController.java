@@ -3,10 +3,12 @@ package com.hesh.user;
 import com.hesh.common.utils.json.JsonUtils;
 import com.hesh.service.LoginService;
 import com.hesh.vo.user.Customer;
+import com.hesh.vo.user.PhoneUser;
 import com.hesh.web.vo.ResultObjectVo;
 import org.eclipse.jetty.util.ajax.JSON;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -67,6 +69,54 @@ public class AdminController {
 
 
 
+        return  resultObjectVo;
+    }
+
+
+
+    @RequestMapping("/showuser")
+    public @ResponseBody  ResultObjectVo showuser(@RequestBody String id){
+
+
+       if(StringUtils.isEmpty("id"))
+           return null;
+        String idtemp=id;
+        if(id.indexOf('=')>0)
+            idtemp=id.substring(0,id.length()-1);
+
+        List<PhoneUser> userlist= loginService.getPhoneUserlistByCustomId(Integer.valueOf(idtemp));
+
+        ResultObjectVo resultObjectVo=new ResultObjectVo();
+
+        if(!userlist.isEmpty()){
+            resultObjectVo.setStatus(1);
+            resultObjectVo.setData(userlist);
+        }else{
+            resultObjectVo.setStatus(0);
+        }
+        return  resultObjectVo;
+    }
+
+
+    @RequestMapping("/deleteuser")
+    public @ResponseBody  ResultObjectVo deleteuser(@RequestBody String id){
+
+
+        if(StringUtils.isEmpty("id"))
+            return null;
+        String idtemp=id;
+        if(id.indexOf('=')>0)
+            idtemp=id.substring(0,id.length()-1);
+
+       boolean issave  =loginService.deleteCustomById(Integer.valueOf(idtemp));
+
+     ResultObjectVo resultObjectVo=new ResultObjectVo();
+
+        if(issave){
+            resultObjectVo.setStatus(1);
+        }else{
+            resultObjectVo.setStatus(0);
+        }
         return  resultObjectVo;
     }
 }

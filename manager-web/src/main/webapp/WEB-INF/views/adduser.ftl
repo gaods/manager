@@ -92,7 +92,7 @@
 </head>
 <body>
 
-<div  style="margin-bottom:10px;"><button type="button" class="btn btn-primary" onclick="javascript:adduser()">新增</button></div>
+<div  style="margin-bottom:10px;"><button type="button" class="btn btn-primary" onclick="javascript:adduser()">新增行</button></div>
 <form  class="bs-example bs-example-form" role="form" id="userform">
 
     <table class="table table-bordered" style="width: 800px;">

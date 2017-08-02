@@ -1,15 +1,17 @@
 package com.hesh.service;
 
 import com.hesh.dao.CustomerMapper;
-import com.hesh.dao.UserDao;
+import com.hesh.dao.PhoneUserMapper;
 import com.hesh.dao.UserMapper;
 import com.hesh.vo.user.Customer;
-import com.hesh.vo.user.UserVO;
+import com.hesh.vo.user.PhoneUser;
+import com.hesh.vo.user.User;
 import com.hesh.web.vo.LoginUser;
 import com.hesh.web.vo.MsgVo;
 import org.springframework.stereotype.Service;
 
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import javax.annotation.Resource;
 import java.util.List;
 
@@ -22,24 +24,30 @@ import java.util.List;
 @Service
 public class LoginService {
 
+    private static final Logger logger = LoggerFactory.getLogger(LoginService.class);
+
     @Resource
     UserMapper userMapper;
 
     @Resource
     CustomerMapper customerMapper;
 
+    @Resource
+    PhoneUserMapper phoneUserMapper;
+
     public MsgVo login(LoginUser user){
 
         MsgVo msgVo=new MsgVo();
-
-        UserVO userVO=userMapper.selectByLoginName(user.getUsername());
+        User user1=new User();
+        user1.setUserName(user.getUsername());
+        User userVO=userMapper.selectuser(user1);
 
         if(userVO==null){
             msgVo.setIssuccess("false");
             msgVo.setMsg("没有该用户");
             return msgVo;
         }
-        if(!user.getPassword().equals(userVO.getPassword())){
+        if(!user.getPassword().equals(userVO.getUserPassword())){
             msgVo.setIssuccess("false");
             msgVo.setMsg("密码不正确");
             return msgVo;
@@ -65,4 +73,16 @@ public class LoginService {
 
     }
 
+    public List<PhoneUser> getPhoneUserlistByCustomId(Integer id){
+        PhoneUser phoneUser=new PhoneUser();
+        phoneUser.setCustomerid(id);
+       return  phoneUserMapper.selectphoneUser(phoneUser);
+    }
+
+
+    public boolean deleteCustomById(Integer id){
+        int i=customerMapper.deleteById(id);
+        logger.info("删除🆔id"+id+"数量"+i);
+      return   i>0;
+    }
 }

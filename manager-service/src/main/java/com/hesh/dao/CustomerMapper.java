@@ -12,4 +12,6 @@ public interface CustomerMapper {
     public int insertcustomer(Customer customerlist);
 
     List<Customer> selectcustomer();
+
+    int deleteById(Integer id);
 }
