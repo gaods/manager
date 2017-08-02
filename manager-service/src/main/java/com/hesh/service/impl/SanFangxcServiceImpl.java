@@ -5,6 +5,7 @@ import com.hesh.service.SanFangxcService;
 import com.hesheng.utils.GetRandomNumber;
 import com.hesheng.utils.HttpClientUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
@@ -105,8 +106,14 @@ public class SanFangxcServiceImpl implements SanFangxcService {
             String user = (String)map.get("xcUserName")  ;
             String passWord = (String)map.get("xcPassWord")  ;
             String url ="http://www.xingchenma.com:9180/service.asmx/UserLoginStr?name="+user+"&psw="+passWord;
-            String token =   HttpClientUtil.httpGetRequest(url) ;
-            return token;
+            String result =   HttpClientUtil.httpGetRequest(url) ;
+
+            if(StringUtils.isEmpty(result)){
+
+            }
+
+
+            return result;
         }
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }

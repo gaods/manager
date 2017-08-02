@@ -22,5 +22,5 @@
 
 	<import resource="classpath*:spring-config-datasource-dbcp.xml" />
 	<!--<import resource="applicationContext-shiro.xml"/>-->
-
+	<import resource="classpath*:spring-redis.xml"/>
 </beans>
