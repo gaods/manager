@@ -1,44 +1,35 @@
 package com.hesh.user;
 
+import com.hesh.common.utils.json.JsonUtils;
 import com.hesh.service.LoginService;
-
 import com.hesh.web.vo.LoginUser;
 import com.hesh.web.vo.MsgVo;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 
 /**
- * Created by gaods on 2017/7/19.
+ * Created by gaods on 2017/8/2.
  */
 
 @Controller
-@RequestMapping("/")
-public class LoginController {
-
+@RequestMapping("/ad")
+public class AndroidController {
 
     @Resource
     LoginService loginService;
 
-    @RequestMapping(method = RequestMethod.GET)
-    public String index(ModelMap model, HttpServletRequest request, HttpServletResponse response) {
-        model.addAttribute("portaltype", "purchase");
-        return "login";
-    }
-
     @RequestMapping(method = RequestMethod.POST,value = "login")
-    public @ResponseBody  MsgVo login( LoginUser user) {
-        //model.addAttribute("portaltype", "purchase");
+    public @ResponseBody  MsgVo login(@RequestBody String logininfo) {
+
+
+        LoginUser user= JsonUtils.fromJson(logininfo,LoginUser.class);
 
         MsgVo result= loginService.login(user);
         return result;
     }
-
 }

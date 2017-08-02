@@ -14,6 +14,14 @@
 
 <dependencies>
 
+
+    <dependency>
+        <groupId>org.springframework.data</groupId>
+        <artifactId>spring-data-redis</artifactId>
+        <version>1.0.2.RELEASE</version>
+    </dependency>
+
+
     <dependency>
         <groupId>com.gao.manager</groupId>
         <artifactId>manager-domain</artifactId>
@@ -27,10 +35,11 @@
         <version>1.0-SNAPSHOT</version>
     </dependency>
 
+
     <dependency>
-        <groupId>io.springside</groupId>
-        <artifactId>springside-redis</artifactId>
-        <version>4.3.0-RELEASE</version>
+        <groupId>redis.clients</groupId>
+        <artifactId>jedis</artifactId>
+        <version>2.1.0</version>
     </dependency>
 
     <dependency>
@@ -97,4 +106,5 @@
         <version>5.1.18</version>
     </dependency>
 </dependencies>
+
 </project>
