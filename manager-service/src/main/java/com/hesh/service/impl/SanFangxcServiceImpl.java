@@ -2,6 +2,7 @@ package com.hesh.service.impl;
 
 import com.hesh.service.SanFangxcService;
 //import com.hesheng.utils.GetRandomNumber;
+import com.hesh.utils.RedisClient;
 import com.hesheng.utils.GetRandomNumber;
 import com.hesheng.utils.HttpClientUtil;
 import org.apache.commons.logging.Log;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created with IntelliJ IDEA.
@@ -22,6 +24,13 @@ import java.util.Map;
 @Service("sanFangxcService")
 public class SanFangxcServiceImpl implements SanFangxcService {
     private static final Log logger = LogFactory.getLog(SanFangxcServiceImpl.class);
+
+    private final int sl=1;
+
+    @Resource
+    RedisClient redisClient;
+
+
     /**
      * 获取号码密码
      * @param map
@@ -34,7 +43,6 @@ public class SanFangxcServiceImpl implements SanFangxcService {
             String phoneNumber = "";
             String xmid = "";
             String token = "";
-            String sl = "";
             String url = "http://www.xingchenma.com:9180/service.asmx/GetHMStr?token=132A49069398917D4C666B1BA77242C8&xmid=200&sl=1&lx=0&a1=&a2=&pk=";
             String paPhone  = HttpClientUtil.httpGetRequest(url);
             if(null!=paPhone&&!("").equals(paPhone)){
@@ -48,6 +56,11 @@ public class SanFangxcServiceImpl implements SanFangxcService {
                     }
                     if(code.equals("id")){
                         String xid = paPhone.replaceAll("id=","");
+                        try {
+                            TimeUnit.SECONDS.sleep(1);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                        }
                         logger.info(xid);
                     }
                 }
