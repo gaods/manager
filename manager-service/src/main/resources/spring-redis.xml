@@ -1,37 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
-       xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:jee="http://www.springframework.org/schema/jee" xmlns:tx="http://www.springframework.org/schema/tx"
-       xmlns:aop="http://www.springframework.org/schema/aop"
-       xsi:schemaLocation="
-            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-
-    <bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
-        <property name="maxIdle" value="${redis.maxIdle}" />
-        <property name="maxActive" value="${redis.maxActive}" />
-        <property name="maxWait" value="${redis.maxWait}" />
-        <property name="testOnBorrow" value="${redis.testOnBorrow}" />
+    <!-- redis配置 -->
+    <bean id="redisPool" class="com.hesh.utils.RedisPoolFactory"
+          scope="prototype" factory-method="createJedisPool">
+        <constructor-arg value="${redis.session.url}"/>
+    </bean>
+    <bean id="jedisTemplate" class="org.springside.modules.nosql.redis.JedisTemplate">
+        <constructor-arg ref="redisPool"></constructor-arg>
     </bean>
 
-    <bean id="connectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
-          p:host-name="${redis.host}" p:port="${redis.port}"   p:pool-config-ref="poolConfig"/>
-
-    <bean id="redisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">
-        <property name="connectionFactory"   ref="connectionFactory" />
-    </bean>
-
-
-    <bean id="cacheManager" class="com.hesh.utils.CacheManager">
-        <property name="jedisTemplate" ref="redisTemplate"/>
-        <property name="sessionTimeout" value="86400"/>
-    </bean>
+    <!--<bean id="cacheManager" class="com.yonyou.cpu.cache.redis.SessionCacheManager">-->
+        <!--<property name="jedisTemplate" ref="jedisTemplate"/>-->
+        <!--<property name="sessionTimeout" value="86400"/>-->
+    <!--</bean>-->
 
     <bean id="redisclinet" class="com.hesh.utils.RedisClient">
-        <property name="jedisTemplate" ref="redisTemplate" />
+        <property name="jedisTemplate" ref="jedisTemplate" />
         <property name="sessionTimeout" value="86400" />
     </bean>
-
 </beans>
