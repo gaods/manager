@@ -17,7 +17,8 @@ public class UserService {
 
 
     public boolean add() {
-       return redisClient.add("2","3");
+        redisClient.set("aaa","3");
+        return true;
     }
 
 }
