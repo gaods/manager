@@ -255,7 +255,7 @@ public class SanFangxcServiceImpl implements SanFangxcService {
      * 退出登录
      * @return
      */
-    private  boolean getExitSanFangLogin(){
+    public  boolean getExitSanFangLogin(){
         boolean flag =false;
         String token = redisClient.get(RedisKey.HS_XC_TOKEN);
         String url = "http://www.xingchenma.com:9180/service.asmx/UserExitStr?token="+token;
