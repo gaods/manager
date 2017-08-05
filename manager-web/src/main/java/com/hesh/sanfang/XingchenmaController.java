@@ -109,6 +109,21 @@ public class XingchenmaController {
         return  JsonUtils.toJson(resultmap);
     }
 
+    /**
+     * 释放号码
+     * 获取 token
+     * 然后存起来
+     * @param param
+     * @return
+     */
+    @RequestMapping("/getGhNumberPa")
+    public @ResponseBody  String getSfNumber(@RequestBody String param){
+        HashMap parammap=  JsonUtils.fromJson(param, HashMap.class);
+       // String token=sanFangxcService.getXingChenToken();
+        PublicResponse  resultmap = sanFangxcService.getYgNumber(parammap);
+        return  JsonUtils.toJson(resultmap);
+    }
+
 
     /**
      * 保存
