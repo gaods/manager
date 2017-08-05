@@ -1,10 +1,17 @@
 package com.hesh.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.databind.util.JSONPObject;
+import com.hesh.dao.SanFangMapper;
 import com.hesh.service.SanFangxcService;
 //import com.hesheng.utils.GetRandomNumber;
 import com.hesh.utils.RedisClient;
+import com.hesh.vo.user.RedisKey;
+import com.hesh.vo.user.SanFang;
+import com.hesh.vo.user.SanFangStatus;
 import com.hesheng.utils.GetRandomNumber;
 import com.hesheng.utils.HttpClientUtil;
+import netscape.javascript.JSObject;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Service;
@@ -29,7 +36,8 @@ public class SanFangxcServiceImpl implements SanFangxcService {
 
     @Resource
     RedisClient redisClient;
-
+     @Resource
+     SanFangMapper sanFangMapper;
 
     /**
      * 获取号码密码
@@ -41,9 +49,10 @@ public class SanFangxcServiceImpl implements SanFangxcService {
         if(null!=map && null!=map.get("opFlag")){
             Map<String, Object> ppMap = new HashMap<String, Object>();
             String phoneNumber = "";
-            String xmid = "";
-            String token = "";
-            String url = "http://www.xingchenma.com:9180/service.asmx/GetHMStr?token=132A49069398917D4C666B1BA77242C8&xmid=200&sl=1&lx=0&a1=&a2=&pk=";
+            String xmid = this.getXmId(map.get("opFlag"));
+            String token = redisClient.get(RedisKey.HS_XC_TOKEN);
+            String sfIp=redisClient.get(RedisKey.HS_XC_IP); //数据库里查询缓存获得
+            String url =   "http://"+sfIp+":9180/service.asmx/GetHMStr?token="+token+"&xmid="+xmid+"&sl=1&lx=0&a1=&a2=&pk=";
             String paPhone  = HttpClientUtil.httpGetRequest(url);
             if(null!=paPhone&&!("").equals(paPhone)){
                 if(paPhone.length()>3){
@@ -57,17 +66,28 @@ public class SanFangxcServiceImpl implements SanFangxcService {
                     if(code.equals("id")){
                         String xid = paPhone.replaceAll("id=","");
                         try {
-                            TimeUnit.SECONDS.sleep(1);
+                            TimeUnit.SECONDS.sleep(3);    //TODO 等待十秒重新查询三方接口获取ID对应的电话号码
+                            String taskUrl =   "http://"+sfIp+":9180/service.asmx/GetTaskStr?token="+token+"&id="+xid;
+                            paPhone  = HttpClientUtil.httpGetRequest(taskUrl);
+                            if(null!=paPhone&&!("").equals(paPhone)){
+                                if(paPhone.length()>10){
+                                    String[] paPhones = paPhone.split(",");
+                                    phoneNumber=paPhones[0];
+                                } else {
+                                    return null;
+                                }
+                            }
                         } catch (InterruptedException e) {
                             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                         }
-                        logger.info(xid);
+                        logger.info("getZp得到的ID"+xid);
                     }
                 }
             }
             String paPassWord = GetRandomNumber.generateLowerString(8);
             ppMap.put("phoneNumber",phoneNumber);
             ppMap.put("passWord",paPassWord);
+            redisClient.set(RedisKey.HS_USE+phoneNumber, JSONObject.toJSONString(map));
             return ppMap;
 
         }
@@ -80,20 +100,41 @@ public class SanFangxcServiceImpl implements SanFangxcService {
      */
     @Override
     public Map<String, Object> getYzNumber(Map<String, Object> map) {
-        if(null!=map && null!=map.get("hm")){
-            Map<String, Object> ppMap = new HashMap<String, Object>();
-            String xmid = "";
-            String token = "";
-            String hm = "";
-            String url = "http://www.xingchenma.com:9180/service.asmx/GetYzmStr?token="+token+"&hm="+hm+"&xmid="+xmid;
-            String yzNum = HttpClientUtil.httpGetRequest(url);
-            if(null!=yzNum&&!("").equals(yzNum)){
-                 if(("1").equals(yzNum)){
+        if(null!=map && null!=map.get("phoneNumber")){
+            try{
+                Map<String, Object> ppMap = new HashMap<String, Object>();
+                String xmid = this.getXmId(map.get("opFlag"));
+                String token = redisClient.get(RedisKey.HS_XC_TOKEN);
+                String hm = (String)map.get("phoneNumber");
+                String sfIp=redisClient.get(RedisKey.HS_XC_IP); //数据库里查询缓存获得
+                String url = "http://"+sfIp+":9180/service.asmx/GetYzmStr?token="+token+"&hm="+hm+"&xmid="+xmid;
+                String yzNum = HttpClientUtil.httpGetRequest(url);
+                if(null!=yzNum&&!("").equals(yzNum)){
+                  // String paPhone = "2017-08-04 15:26:19收到 您正在注册平安金管家APP，验证码788479，有效期为2分钟，切勿转发或告知他人。【平安人寿】";
+                    if(yzNum.equals("1")) {
+                        TimeUnit.SECONDS.sleep(10);
+                        yzNum = HttpClientUtil.httpGetRequest(url);
+                    }
+                    if(yzNum.equals("0")) {
+                        this.getXingChenToken();
+                    }
+                    if(yzNum.length()>20){
+                        String jieguo2 = yzNum.substring(yzNum.indexOf("码")+1,yzNum.indexOf("码")+7);
+                        logger.info(jieguo2);
+                    } else{
+                        ppMap.put("code","-1");
+                        ppMap.put("msg","getYzNumber报错"+yzNum+"end");
+                    }
 
-                 }
+
+                }
+
+            } catch (Exception ex) {
+                //TODO 如果在使用GetYzmStr函数获取接收到短信或语音验证码时，像网络丢包或程序处理异常出错等情况下，可以使用GetYzmLogStr再次来获取丢失验证码
+             //   String url = "http://www.xingchenma.com:9180/service.asmx/GetYzmLogStr?token="+token+"&hm="+hm+"&xmid="+xmid;
             }
           //  ppMap.put("passWord",paPassWord);
-            return ppMap;
+          //  return ppMap;
 
         }
         return null;  //To change body of implemented methods use File | Settings | File Templates.
@@ -127,31 +168,49 @@ public class SanFangxcServiceImpl implements SanFangxcService {
 
     /**
      * 登录验证
-     * @param map
+     * @param
      * @return
      */
     @Override
-    public String getXingChenToken(Map<String, Object> map) {
+    public String getXingChenToken() {
         try{
-            if(null!=map && null!=map.get("xcUserName") && null!=map.get("xcPassWord")){
-                String user = (String)map.get("xcUserName")  ;
-                String passWord = (String)map.get("xcPassWord")  ;
-                String url ="http://www.xingchenma.com:9180/service.asmx/UserLoginStr?name="+user+"&psw="+passWord;
-                String token =   HttpClientUtil.httpGetRequest(url) ;
-                //三方接口返回是否为空校验
-                if(null!=token && !("").equals(token)){
-                    if(token.length()>20){
-                        //TODO 存储token信息在缓存中，方便下次直接使用每次任务结束清理缓存信息
-                        return token;
+            String token = redisClient.get(RedisKey.HS_XC_TOKEN);
+            if(null!=token && !("").equals(token)){
+                return token;
+            } else{
+                int id= 1;
+                SanFang sInfo = sanFangMapper.getSanFangInfoById(id);
+                if(null!=sInfo){
+                    String user = sInfo.getSfCode();
+                    String passWord = sInfo.getSfPassword();
+                    String sIp = sInfo.getSfIp();
+                    String url ="http://"+sIp+":9180/service.asmx/UserLoginStr?name="+user+"&psw="+passWord;
+                    HttpClientUtil.httpGetRequest(url) ;
+                    //三方接口返回是否为空校验
+                    if(null!=token && !("").equals(token)){
+                        if(token.length()>20){
+                            redisClient.set(RedisKey.HS_XC_TOKEN,token);
+                            redisClient.set(RedisKey.HS_XC_IP,sIp);
+                            return token;
+                        }
+                    }else {
+                        logger.info("调用接口超时异常"+token);
+                        return null;
                     }
-                }else {
-                    logger.info("调用接口超时异常"+token);
-                    return null;
                 }
             }
         } catch (Exception ex){
               logger.error("getXingChenToken"+ex);
         }
         return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+
+    private String getXmId(Object obj){
+        if(null!=obj&&!("").equals(obj)){
+         String   xmid = SanFangStatus.getName(Integer.parseInt((String)obj));
+            return xmid;
+        }
+        return null;
     }
 }
