@@ -1,12 +1,14 @@
 package com.hesh.vo;
 
 
+import java.io.Serializable;
+
 /**
  * Created by caolin on 2016/9/13.
  */
-public class ResultObjectVo<T> {
+public class ResultObjectWebVo<T> implements Serializable {
     //0失败1成功
-    private String status=ResponseCode.success;
+    private String status= ResponseWebCode.success;
 
     //单个对象
     private T data = null;
@@ -38,9 +40,9 @@ public class ResultObjectVo<T> {
         this.msg = msg;
     }
 
-    public ResultObjectVo(){}
-    public ResultObjectVo(String status){
-        if(ResponseCode.success.equals(status)){
+    public ResultObjectWebVo(){}
+    public ResultObjectWebVo(String status){
+        if(ResponseWebCode.success.equals(status)){
             this.msg="操作失败！";
         }else{
             this.msg="操作成功！";
