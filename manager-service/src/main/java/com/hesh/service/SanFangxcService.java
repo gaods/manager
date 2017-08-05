@@ -12,10 +12,13 @@ import java.util.Map;
  * To change this template use File | Settings | File Templates.
  */
 public interface SanFangxcService {
-    public Map<String,Object>  getZcPhonePassWord(Map<String,Object>  map);
+    public PublicResponse  getZcPhonePassWord(Map<String,Object>  map);
 
-    public Map<String, Object> getYzNumber(Map<String, Object> map);
+    public PublicResponse getYzNumber(Map<String, Object> map);
 
     public PublicResponse<String> getXingChenToken();
-    public Map<String, Object> getSfNumber(Map<String, Object> map);
+
+    public PublicResponse getSfNumber(Map<String, Object> map);
+
+    public PublicResponse getYgNumber(Map<String, Object> map);
 }
