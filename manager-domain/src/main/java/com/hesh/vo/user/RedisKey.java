@@ -11,6 +11,6 @@ public class RedisKey {
     private static final String STOKEN= "HS";
     public final static String HS_XC_TOKEN =STOKEN + ".XC";
     public final static String HS_XC_IP =STOKEN + ".XC.IP";
-    public final static String HS_USE =STOKEN + ".PHONE_";
+    public final static String HS_PHONE =STOKEN + ".PHONE_";
     public final static String HS_CUSTOMER =STOKEN + ".CID_";
 }
