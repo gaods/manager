@@ -55,7 +55,7 @@ public class XingchenmaController {
     @RequestMapping("/getSfNumber")
     public @ResponseBody  String getSfNumber(@RequestBody String param){
         HashMap parammap=  JsonUtils.fromJson(param, HashMap.class);
-       String token=sanFangxcService.getXingChenToken(parammap);
+       String token=sanFangxcService.getXingChenToken();
 
 
         Map<String, Object>  resultmap=sanFangxcService.getSfNumber(parammap);
@@ -63,14 +63,18 @@ public class XingchenmaController {
         return  JsonUtils.toJson(resultmap);
     }
 
-
-    @RequestMapping("/getXingChenToken")
-    public @ResponseBody  String getXingChenToken(@RequestBody String param){
-
-        String result=sanFangxcService.getXingChenToken(JsonUtils.fromJson(param, HashMap.class));
-
-
-
-        return  result;
+    /**
+     *  获取号码
+     * @param param
+     * @return
+     */
+    @RequestMapping("/getPhoneNumberPa")
+    public @ResponseBody  String getXingChenToken(@RequestBody Map<String, Object> param){
+        String result=sanFangxcService.getXingChenToken();
+        if(null!=result){
+           Map<String, Object> map =  sanFangxcService.getZcPhonePassWord(param);
+            return  JsonUtils.toJson(map);
+        }
+        return null;
     }
 }
