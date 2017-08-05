@@ -213,7 +213,12 @@ public class SanFangxcServiceImpl implements SanFangxcService {
     }
    @Override
     public PublicResponse getYgNumber(Map<String, Object> map){
-      // boolean flag =
+       boolean flag = customerService.getCustomerList();
+       if(flag){
+
+       } else{
+           this
+       }
        return null;
     }
     /**
