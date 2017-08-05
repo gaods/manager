@@ -2,6 +2,7 @@ package com.hesh.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hesh.dao.SanFangMapper;
+import com.hesh.service.CustomerService;
 import com.hesh.service.SanFangxcService;
 import com.hesh.utils.RedisClient;
 import com.hesh.vo.user.*;
@@ -33,9 +34,10 @@ public class SanFangxcServiceImpl implements SanFangxcService {
 
     @Resource
     RedisClient redisClient;
-     @Resource
-     SanFangMapper sanFangMapper;
-
+    @Resource
+    SanFangMapper sanFangMapper;
+    @Resource
+    CustomerService customerService;
     /**
      * 获取号码密码
      * @param map
@@ -98,7 +100,7 @@ public class SanFangxcServiceImpl implements SanFangxcService {
                 String paPassWord = GetRandomNumber.generateLowerString(8);
                 ppMap.put("phoneNumber",phoneNumber);
                 ppMap.put("passWord",paPassWord);
-                redisClient.set(RedisKey.HS_USE+phoneNumber, JSONObject.toJSONString(map));
+                redisClient.set(RedisKey.HS_USE+phoneNumber, JSONObject.toJSONString(ppMap));
                 publicResponse.setSuccess(true);
                 publicResponse.setData(ppMap);
             }
@@ -211,7 +213,7 @@ public class SanFangxcServiceImpl implements SanFangxcService {
     }
    @Override
     public PublicResponse getYgNumber(Map<String, Object> map){
-
+      // boolean flag =
        return null;
     }
     /**
