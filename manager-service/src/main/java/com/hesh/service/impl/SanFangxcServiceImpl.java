@@ -100,7 +100,7 @@ public class SanFangxcServiceImpl implements SanFangxcService {
                 String paPassWord = GetRandomNumber.generateLowerString(8);
                 ppMap.put("phoneNumber",phoneNumber);
                 ppMap.put("passWord",paPassWord);
-                redisClient.set(RedisKey.HS_USE+phoneNumber, JSONObject.toJSONString(ppMap));
+                redisClient.set(RedisKey.HS_PHONE+phoneNumber, JSONObject.toJSONString(ppMap));
                 publicResponse.setSuccess(true);
                 publicResponse.setData(ppMap);
             }
@@ -213,13 +213,44 @@ public class SanFangxcServiceImpl implements SanFangxcService {
     }
    @Override
     public PublicResponse getYgNumber(Map<String, Object> map){
+       PublicResponse publicResponse=new PublicResponse();
        boolean flag = customerService.getCustomerList();
+       Map<String, Object> phoneInfos = null;
        if(flag){
-
+         if(null!=map&&null!=map.get("phoneNumber")&&!("").equals(map.get("phoneNumber"))){
+            String phone = (String) map.get("phoneNumber");
+            String phoneInfo  = redisClient.get(RedisKey.HS_PHONE+phone);
+             if(null!=phoneInfo && !("").equals(phoneInfo)){
+                 JSONObject object = JSONObject.parseObject(phoneInfo) ;
+                 phoneInfos = (Map<String, Object>)JSONObject.toJavaObject(object, Map.class);
+             }
+            String ygNumber= redisClient.get(RedisKey.HS_CUSTOMER);
+            Customer customer = JSONObject.parseObject(ygNumber,Customer.class);
+             if(null!=customer && customer.getSsCount()>0){
+                 publicResponse.setSuccess(true);
+                 publicResponse.setData(customer.getPnCode());
+                 int count  =customer.getSsCount();
+                 int ssCount = --count;
+                 if(ssCount<=0){
+                     redisClient.delete(RedisKey.HS_CUSTOMER);
+                     if(null != phoneInfos&&null!=phoneInfos.get("phoneNumber") ){
+                         String delPhone = (String) phoneInfos.get("phoneNumber");
+                         redisClient.delete(RedisKey.HS_PHONE+delPhone);
+                     }
+                 }else{
+                     if(null != phoneInfos&&null!=phoneInfos.get("phoneNumber") ){
+                         String delPhone = (String) phoneInfos.get("phoneNumber");
+                         redisClient.delete(RedisKey.HS_PHONE+delPhone);
+                     }
+                 }
+             }
+         }
        } else{
-           this
+           this.getExitSanFangLogin();
+           publicResponse.setSuccess(true);
+           publicResponse.setData("退出登录！");
        }
-       return null;
+       return publicResponse;
     }
     /**
      *  获取项目ID
