@@ -4,6 +4,7 @@ package com.hesh.vo.user;
 import com.hesh.BaseEntityBean;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  *
@@ -34,6 +35,8 @@ public class Customer  extends BaseEntityBean {
 
     /**创建时间**/
     private java.util.Date creatTime;
+
+    private java.util.Date modifyTime;
 
 
 
@@ -106,6 +109,19 @@ public class Customer  extends BaseEntityBean {
         return this.modifiter;
     }
 
+    public Integer getSsCount() {
+        return ssCount;
+    }
 
+    public void setSsCount(Integer ssCount) {
+        this.ssCount = ssCount;
+    }
 
+    public Date getModifyTime() {
+        return modifyTime;
+    }
+
+    public void setModifyTime(Date modifyTime) {
+        this.modifyTime = modifyTime;
+    }
 }
