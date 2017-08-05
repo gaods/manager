@@ -14,6 +14,6 @@ public interface SanFangxcService {
 
     public Map<String, Object> getYzNumber(Map<String, Object> map);
 
-    public String getXingChenToken(Map<String,Object> map);
+    public String getXingChenToken();
     public Map<String, Object> getSfNumber(Map<String, Object> map);
 }
