@@ -2,9 +2,14 @@ package com.hesh.sanfang;
 
 import com.hesh.common.utils.json.JsonUtils;
 import com.hesh.service.CustomerService;
+import com.hesh.service.EmployeeService;
 import com.hesh.service.impl.SanFangxcServiceImpl;
 import com.hesh.vo.ResultObjectWebVo;
 import com.hesh.vo.user.Customer;
+import com.hesh.vo.user.Employee;
+import com.hesh.vo.user.PublicResponse;
+import com.hesh.web.vo.ResultObjectVo;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Controller;
@@ -30,6 +35,9 @@ public class XingchenmaController {
     SanFangxcServiceImpl sanFangxcService;
     @Resource
     CustomerService customerService;
+
+    @Resource
+    EmployeeService employeeService;
     /**
      *  获取号码
      * @param param
@@ -37,28 +45,34 @@ public class XingchenmaController {
      */
     @RequestMapping("/getPhoneNumberPa")
     public @ResponseBody  String getXingChenToken(@RequestBody Map<String, Object> param){
+        ResultObjectWebVo resultObjectWebVo = new ResultObjectWebVo();
         try{
-            PublicResponse
-            ResultObjectWebVo resultObjectWebVo = new ResultObjectWebVo();
+
+
             boolean flag =  customerService.getCustomerList();
             if(flag){
-                String  result =null;
-                 // PublicResponse<String> result=  sanFangxcService.getXingChenToken();
-                if(null!=result){
-                    Map<String, Object> map =  sanFangxcService.getZcPhonePassWord(param);
+                PublicResponse<String> result=  sanFangxcService.getXingChenToken();
+
+                if(null!=result&&result.isSuccess()){
+
+                    PublicResponse response =  sanFangxcService.getZcPhonePassWord(param);
+
+                    resultObjectWebVo.setStatus(String.valueOf(response.isSuccess()));
+                    resultObjectWebVo.setData(response.getData());
                 }else{
                     //TODO 退出整个操作提示三方接口有问题
-
-                    resultObjectWebVo.setStatus();
+                    sanFangxcService.getExitSanFangLogin();
+                    resultObjectWebVo.setStatus("1");
                 }
             }else{
-
+                resultObjectWebVo.setStatus("0");
+                resultObjectWebVo.setMsg("没有员工号");
             }
         }catch (Exception ex){
             logger.error("调用三方异常"+ex);
         }
 
-        return  JsonUtils.toJson(map);
+        return  JsonUtils.toJson(resultObjectWebVo);
     }
 
     /**
@@ -69,8 +83,8 @@ public class XingchenmaController {
     @RequestMapping("/getYzNumber")
     public @ResponseBody  ResultObjectVo getYzNumber(@RequestBody String param){
         ResultObjectVo<String> resultObjectVo = new ResultObjectVo<String>();
-        Map<String, Object>  resultmap=sanFangxcService.getYzNumber(JsonUtils.fromJson(param, HashMap.class));
-        return  JsonUtils.toJson(resultmap);
+        PublicResponse resultmap=sanFangxcService.getYzNumber(JsonUtils.fromJson(param, HashMap.class));
+        return  resultObjectVo;
     }
     /**
      *
@@ -87,13 +101,54 @@ public class XingchenmaController {
     @RequestMapping("/getSfNumber")
     public @ResponseBody  String getSfNumber(@RequestBody String param){
         HashMap parammap=  JsonUtils.fromJson(param, HashMap.class);
-       String token=sanFangxcService.getXingChenToken();
+       // String token=sanFangxcService.getXingChenToken();
 
 
-        Map<String, Object>  resultmap=sanFangxcService.getSfNumber(parammap);
+        PublicResponse  resultmap=sanFangxcService.getSfNumber(parammap);
 
         return  JsonUtils.toJson(resultmap);
     }
+
+
+    /**
+     * 保存
+     * 然后存起来
+     * @param param
+     * @return
+     */
+    @RequestMapping("/InsertInfoPa")
+    public @ResponseBody  String insertInfoPa(@RequestBody Map<String, Object> param){
+
+        Object phoneNumber=param.get("phoneNumber");
+        Object name=param.get("name");
+        Object telphone=param.get("telphone");
+        Object emno=param.get("emno");
+        Object flag=param.get("flag");
+        Employee employee=new Employee();
+        employee.setFlag(getValueifnul(flag));
+        employee.setName(getValueifnul(name));
+        employee.setTelphone(getValueifnul(telphone));
+        employee.setEmno(getValueifnul(emno));
+
+        PublicResponse response= employeeService.insertpa_employee(employee);
+
+        String result="1";
+
+        //失败
+        if(!response.isSuccess()){
+            result= "2";
+        }
+        return result;
+    }
+
+
+    private String getValueifnul(Object val){
+
+        if(val==null)return "";
+        return val.toString();
+    }
+
+
 
 
 }

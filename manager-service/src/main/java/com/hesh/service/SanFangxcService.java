@@ -21,4 +21,6 @@ public interface SanFangxcService {
     public PublicResponse getSfNumber(Map<String, Object> map);
 
     public PublicResponse getYgNumber(Map<String, Object> map);
+
+    public   boolean getExitSanFangLogin();
 }

@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hesh.dao.EmployeeMapper">
+
+	<!--实体映射-->
+	<resultMap id="employee" type="com.hesh.vo.user.Employee">
+		<!---->
+		<id property="id" column="id" />
+		<!--姓名-->
+		<result property="name" column="name" jdbcType="VARCHAR" />
+		<!--手机号-->
+		<result property="telphone" column="telphone" jdbcType="VARCHAR" />
+		<!--工号-->
+		<result property="emno" column="emno" jdbcType="VARCHAR" />
+		<!---->
+		<result property="creator" column="creator" jdbcType="VARCHAR" />
+		<result property="flag" column="flag" jdbcType="VARCHAR" />
+		<!---->
+		<result property="createTime" column="create_time" jdbcType="VARCHAR" />
+		<!---->
+		<result property="ts" column="ts" jdbcType="TIMESTAMP" />
+		<!--删除标志-->
+		<result property="dr" column="dr" jdbcType="INTEGER" />
+	</resultMap>
+
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+		 id,	name,	telphone,	emno,	creator,	create_time,flag,	ts,	dr
+	</sql>
+
+	<!--查询条件-->
+	<sql id="sqlCondition">
+			<if test="id != null">
+				 and id= #{id}
+			</if>
+			<if test="name != null">
+				 and name= #{name}
+			</if>
+			<if test="telphone != null">
+				 and telphone= #{telphone}
+			</if>
+			<if test="emno != null">
+				 and emno= #{emno}
+			</if>
+			<if test="creator != null">
+				 and creator= #{creator}
+			</if>
+			<if test="createTime != null">
+				 and create_time= #{createTime}
+			</if>
+			<if test="flag != null">
+				and flag= #{createTime}
+			</if>
+
+	</sql>
+
+	<!--分页获取数据(开始)  -->
+	<select id="getemployeeCount" resultType="java.lang.Long">
+		 SELECT
+		count(0)
+		 FROM pa_employee
+		 WHERE dr=0 
+		<include refid="sqlCondition"/>
+	</select>
+
+	<!--分页获取数据(开始)  -->
+	<select id="selectemployee" resultType="employee">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM pa_employee
+		 WHERE dr=0 
+		<include refid="sqlCondition"/>
+		</select>
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectById" resultType="employee" parameterType="java.lang.Integer">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM pa_employee
+		 WHERE id = #{id}
+	</select>
+
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		 DELETE FROM pa_employee
+		 WHERE id = #{id}
+	</delete>
+
+	<!-- 添加 -->
+	<insert id="insertpa_employee" parameterType="com.hesh.vo.user.Employee">
+		 INSERT INTO pa_employee
+ 		(id,name,telphone,emno,creator,create_time,flag,ts,dr)
+		 VALUES 
+ 		(#{id},#{name},#{telphone},#{emno},#{creator},#{createTime},#{flag},now(),0)
+	</insert>
+
+	<!-- 添加 （匹配有值的字段）-->
+	<insert id="insertSelective" parameterType="employee">
+		 INSERT INTO pa_employee
+		 <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="id != null">
+				 id,
+			</if>
+			<if test="name != null">
+				 name,
+			</if>
+			<if test="telphone != null">
+				 telphone,
+			</if>
+			<if test="emno != null">
+				 emno,
+			</if>
+			<if test="creator != null">
+				 creator,
+			</if>
+			<if test="createTime != null">
+				 create_time,
+			</if>
+			<if test="ts != null">
+				 ts,
+			</if>
+			<if test="dr != null">
+				 dr
+			</if>
+
+		 </trim>
+		 <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id!=null">
+				 #{id},
+			</if>
+			<if test="name!=null">
+				 #{name},
+			</if>
+			<if test="telphone!=null">
+				 #{telphone},
+			</if>
+			<if test="emno!=null">
+				 #{emno},
+			</if>
+			<if test="creator!=null">
+				 #{creator},
+			</if>
+			<if test="createTime!=null">
+				 #{createTime},
+			</if>
+			<if test="ts!=null">
+				 #{ts},
+			</if>
+			<if test="dr!=null">
+				 #{dr}
+			</if>
+		 </trim>
+	</insert>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKeySelective" parameterType="employee">
+		 UPDATE pa_employee
+ 		 <set> 
+			<if test="name != null">
+				 name = #{name},
+			</if>
+			<if test="telphone != null">
+				 telphone = #{telphone},
+			</if>
+			<if test="emno != null">
+				 emno = #{emno},
+			</if>
+			<if test="creator != null">
+				 creator = #{creator},
+			</if>
+			<if test="createTime != null">
+				 create_time = #{createTime},
+			</if>
+			<if test="ts != null">
+				 ts = #{ts},
+			</if>
+			<if test="dr != null">
+				 dr = #{dr}
+			</if>
+
+ 		 </set>
+		 WHERE id = #{id}
+	</update>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKey" parameterType="employee">
+		 UPDATE pa_employee
+		 SET 
+			 name = #{name},
+			 telphone = #{telphone},
+			 emno = #{emno},
+			 creator = #{creator},
+			 create_time = #{createTime},
+			 ts =now(),
+			 dr = #{dr}
+		 WHERE id = #{id}
+	</update>
+
+</mapper>

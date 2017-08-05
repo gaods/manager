@@ -78,7 +78,7 @@
 		 <include refid="Base_Column_List" />
 		 FROM pa_customer
 		 WHERE dr=0
-		<include refid="sqlCondition"/>
+		 and pastate= '3'
 		 	</select>
 
 	<!-- 查询（根据主键ID查询） -->
