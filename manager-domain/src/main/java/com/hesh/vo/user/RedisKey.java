@@ -12,4 +12,5 @@ public class RedisKey {
     public final static String HS_XC_TOKEN =STOKEN + ".XC";
     public final static String HS_XC_IP =STOKEN + ".XC.IP";
     public final static String HS_USE =STOKEN + ".DEMO";
+    public final static String HS_CUSTOMER =STOKEN + ".CID";
 }
