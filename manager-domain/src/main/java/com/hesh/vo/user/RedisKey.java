@@ -9,8 +9,8 @@ package com.hesh.vo.user;
  */
 public class RedisKey {
     private static final String STOKEN= "HS";
-    public final static String HS_XC_TOKEN =STOKEN + ".XC_";
-    public final static String HS_XC_IP =STOKEN + ".XC.IP_";
+    public final static String HS_XC_TOKEN =STOKEN + ".XC";
+    public final static String HS_XC_IP =STOKEN + ".XC.IP";
     public final static String HS_USE =STOKEN + ".PHONE_";
     public final static String HS_CUSTOMER =STOKEN + ".CID_";
 }
