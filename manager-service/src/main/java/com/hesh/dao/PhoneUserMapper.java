@@ -12,4 +12,7 @@ public interface PhoneUserMapper {
 
     List<PhoneUser> selectphoneUser(PhoneUser phoneUser);
 
+    void   insertSelective(PhoneUser phoneUser);
+    void   insertpaPhoneUser(PhoneUser phoneUser);
+
 }
