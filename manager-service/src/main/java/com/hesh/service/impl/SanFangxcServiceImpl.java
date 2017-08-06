@@ -3,6 +3,7 @@ package com.hesh.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.hesh.dao.SanFangMapper;
 import com.hesh.service.CustomerService;
+import com.hesh.service.PhoneUserService;
 import com.hesh.service.SanFangxcService;
 import com.hesh.utils.RedisClient;
 import com.hesh.vo.user.*;
@@ -38,6 +39,8 @@ public class SanFangxcServiceImpl implements SanFangxcService {
     SanFangMapper sanFangMapper;
     @Resource
     CustomerService customerService;
+    @Resource
+    PhoneUserService phoneUserService;
     /**
      * 获取号码密码
      * @param map
@@ -115,7 +118,7 @@ public class SanFangxcServiceImpl implements SanFangxcService {
     @Override
     public PublicResponse getYzNumber(Map<String, Object> map) {
         PublicResponse publicResponse = new PublicResponse();
-        if(null!=map && null!=map.get("phoneNumber")){
+        if(null!=map && null!=map.get("phoneNumber") && null!=map.get("opFlag")&&!("").equals(map.get("opFlag"))){
             Map<String, Object> ppMap = new HashMap<String, Object>();
             String yzmCode ="";
             String yzNum="";
@@ -161,7 +164,7 @@ public class SanFangxcServiceImpl implements SanFangxcService {
             } catch (Exception ex) {
                 //TODO 如果在使用GetYzmStr函数获取接收到短信或语音验证码时，像网络丢包或程序处理异常出错等情况下，可以使用GetYzmLogStr再次来获取丢失验证码
                 try{
-                    String url = "http://www.xingchenma.com:9180/service.asmx/GetYzmLogStr?token="+token+"&hm="+hm+"&xmid="+xmid;
+                    String url = "http://"+sfIp+":9180/service.asmx/GetYzmLogStr?token="+token+"&hm="+hm+"&xmid="+xmid;
                     yzNum = HttpClientUtil.httpGetRequest(url);
                     if(null!=yzNum && yzNum.length()>20){
                         yzmCode = yzNum.substring(yzNum.indexOf("码")+1,yzNum.indexOf("码")+7);
@@ -175,6 +178,9 @@ public class SanFangxcServiceImpl implements SanFangxcService {
             publicResponse.setData(ppMap);
             publicResponse.setSuccess(true);
             return publicResponse;
+        } else{
+            publicResponse.setData("参数不能为空");
+            publicResponse.setSuccess(false);
         }
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
@@ -192,7 +198,8 @@ public class SanFangxcServiceImpl implements SanFangxcService {
                 Map<String, Object> ppMap = new HashMap<String, Object>();
                 String token = redisClient.get(RedisKey.HS_XC_TOKEN);
                 String hm = (String)map.get("phoneNumber");
-                String url = "http://www.xingchenma.com:9180/service.asmx/sfHmStr?token="+token+"&hm="+hm;
+                String sfIp=redisClient.get(RedisKey.HS_XC_IP); //数据库里查询缓存获得
+                String url = "http://"+sfIp+":9180/service.asmx/sfHmStr?token="+token+"&hm="+hm;
                 String sfPhone = HttpClientUtil.httpGetRequest(url);
                 if(null!=sfPhone&&!("").equals(sfPhone)){
                     if(("1").equals(sfPhone)){
@@ -215,29 +222,47 @@ public class SanFangxcServiceImpl implements SanFangxcService {
     public PublicResponse getYgNumber(Map<String, Object> map){
        PublicResponse publicResponse=new PublicResponse();
        boolean flag = customerService.getCustomerList();
+       PhoneUser phoneUser =null;
+       Customer customer = null;
        Map<String, Object> phoneInfos = null;
        if(flag){
+           phoneUser = new PhoneUser();
          if(null!=map&&null!=map.get("phoneNumber")&&!("").equals(map.get("phoneNumber"))){
             String phone = (String) map.get("phoneNumber");
+            String passWord = (String) map.get("passWord");
+             phoneUser.setCuPhone(phone);//电话号码数据存储
+             phoneUser.setCuPassword(passWord);//存储密码
             String phoneInfo  = redisClient.get(RedisKey.HS_PHONE+phone);
              if(null!=phoneInfo && !("").equals(phoneInfo)){
                  JSONObject object = JSONObject.parseObject(phoneInfo) ;
                  phoneInfos = (Map<String, Object>)JSONObject.toJavaObject(object, Map.class);
              }
             String ygNumber= redisClient.get(RedisKey.HS_CUSTOMER);
-            Customer customer = JSONObject.parseObject(ygNumber,Customer.class);
+            customer = JSONObject.parseObject(ygNumber,Customer.class);
+             //获取到缓存信息1如果结果对于0说明还存在值减减之后存到缓存，修改数据库信息
              if(null!=customer && customer.getSsCount()>0){
                  publicResponse.setSuccess(true);
                  publicResponse.setData(customer.getPnCode());
+                 phoneUser.setCustomerid(customer.getId());//存储主键
+                 phoneUser.setUserPin(customer.getPnCode());//存储对应的业务员的编号
+                 phoneUser.setOpUserId("TODO");//存储登陆人编号
+                 phoneUserService.insertPhoneUserService(phoneUser);//存储注册的基本信息
                  int count  =customer.getSsCount();
                  int ssCount = --count;
+                 //无论哪种情况必须存储基本信息
+                 customer.setSsCount(ssCount);
                  if(ssCount<=0){
-                     redisClient.delete(RedisKey.HS_CUSTOMER);
+                     redisClient.delete(RedisKey.HS_CUSTOMER);  //变成零删除缓存的信息
                      if(null != phoneInfos&&null!=phoneInfos.get("phoneNumber") ){
                          String delPhone = (String) phoneInfos.get("phoneNumber");
                          redisClient.delete(RedisKey.HS_PHONE+delPhone);
                      }
+                     customer.setSsCount(0);
+                     customer.setState(1);
+                     customerService.updateCustomerById(customer);
                  }else{
+                     //重新更新缓存变成最新的
+                     redisClient.set(RedisKey.HS_CUSTOMER,JSONObject.toJSONString(customer));
                      if(null != phoneInfos&&null!=phoneInfos.get("phoneNumber") ){
                          String delPhone = (String) phoneInfos.get("phoneNumber");
                          redisClient.delete(RedisKey.HS_PHONE+delPhone);
@@ -249,6 +274,9 @@ public class SanFangxcServiceImpl implements SanFangxcService {
            this.getExitSanFangLogin();
            publicResponse.setSuccess(true);
            publicResponse.setData("退出登录！");
+           customer.setSsCount(customer.getSsCount());
+           customer.setState(1);
+           customerService.updateCustomerById(customer);
        }
        return publicResponse;
     }
@@ -272,7 +300,8 @@ public class SanFangxcServiceImpl implements SanFangxcService {
     private boolean getSfAllPhoneNumber(){
        boolean flag = false;
         String token = redisClient.get(RedisKey.HS_XC_TOKEN);
-        String url = "http://www.xingchenma.com:9180/service.asmx/sfAllStr?token="+token;
+        String sfIp=redisClient.get(RedisKey.HS_XC_IP); //数据库里查询缓存获得
+        String url = "http://"+sfIp+":9180/service.asmx/sfAllStr?token="+token;
         String sfAll = HttpClientUtil.httpGetRequest(url);
         if(null!=sfAll && ("1").equals(sfAll)){
              flag=true;
@@ -289,7 +318,8 @@ public class SanFangxcServiceImpl implements SanFangxcService {
     public  boolean getExitSanFangLogin(){
         boolean flag =false;
         String token = redisClient.get(RedisKey.HS_XC_TOKEN);
-        String url = "http://www.xingchenma.com:9180/service.asmx/UserExitStr?token="+token;
+        String sfIp=redisClient.get(RedisKey.HS_XC_IP); //数据库里查询缓存获得
+        String url = "http://"+sfIp+":9180/service.asmx/UserExitStr?token="+token;
         String sfAll = HttpClientUtil.httpGetRequest(url);
         if(null!=sfAll && ("1").equals(sfAll)){
             redisClient.delete(redisClient.get(RedisKey.HS_XC_TOKEN));
