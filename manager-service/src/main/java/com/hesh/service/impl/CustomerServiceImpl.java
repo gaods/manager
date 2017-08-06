@@ -50,4 +50,9 @@ public class CustomerServiceImpl  implements CustomerService {
         }
         return flag;
     }
+
+    @Override
+    public void updateCustomerById(Customer customer) {
+         customerMapper.updateByPrimaryKeySelective(customer);
+    }
 }

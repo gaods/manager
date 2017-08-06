@@ -84,7 +84,7 @@
 	</delete>
 
 	<!-- 添加 -->
-	<insert id="insertpa_phone_user" parameterType="com.hesh.vo.user.PhoneUser">
+	<insert id="insertpaPhoneUser" parameterType="com.hesh.vo.user.PhoneUser">
 		 INSERT INTO pa_phone_user
  		(id,cuPhone,cuPassword,userPin,opUserId,customerid,dr)
 		 VALUES 

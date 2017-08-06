@@ -13,4 +13,6 @@ import java.util.List;
  */
 public interface CustomerService {
     public boolean getCustomerList();
+
+    public void updateCustomerById(Customer customer);
 }
