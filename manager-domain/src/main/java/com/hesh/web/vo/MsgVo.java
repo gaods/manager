@@ -11,6 +11,8 @@ public class MsgVo implements Serializable{
 
     public String msg;
 
+    private String data;
+
     public String getIssuccess() {
         return issuccess;
     }
@@ -25,5 +27,13 @@ public class MsgVo implements Serializable{
 
     public void setMsg(String msg) {
         this.msg = msg;
+    }
+
+    public String getData() {
+        return data;
+    }
+
+    public void setData(String data) {
+        this.data = data;
     }
 }

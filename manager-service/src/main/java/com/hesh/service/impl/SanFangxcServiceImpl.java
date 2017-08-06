@@ -124,7 +124,7 @@ public class SanFangxcServiceImpl implements SanFangxcService {
             String hm = (String)map.get("phoneNumber");
             String sfIp=redisClient.get(RedisKey.HS_XC_IP); //数据库里查询缓存获得
             try{
-                TimeUnit.SECONDS.sleep(10);//程序先等待十秒钟获取验证码
+               // TimeUnit.SECONDS.sleep(10);//程序先等待十秒钟获取验证码
                 String url = "http://"+sfIp+":9180/service.asmx/GetYzmStr?token="+token+"&hm="+hm+"&xmid="+xmid;
                 yzNum = HttpClientUtil.httpGetRequest(url);
                 if(null!=yzNum&&!("").equals(yzNum)){

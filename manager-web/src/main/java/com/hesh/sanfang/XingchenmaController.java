@@ -32,9 +32,10 @@ public class XingchenmaController {
     private static final Log logger = LogFactory.getLog(XingchenmaController.class);
 
     @Resource
-    SanFangxcService sanFangxcService;
+    SanFangxcServiceImpl sanFangxcService;
     @Resource
     CustomerService customerService;
+
     @Resource
     EmployeeService employeeService;
     /**
@@ -43,9 +44,11 @@ public class XingchenmaController {
      * @return
      */
     @RequestMapping("/getPhoneNumberPa")
-    public @ResponseBody  String getXingChenToken(@RequestBody Map<String, Object> param){
+    public @ResponseBody  String getXingChenToken(@RequestBody String paramtemp){
         ResultObjectWebVo resultObjectWebVo = new ResultObjectWebVo();
         try{
+            Map<String, Object> param= com.hesh.utils.WebUtils.covertToMap(paramtemp);
+
             boolean flag =  customerService.getCustomerList();
             if(flag){
                 PublicResponse<String> result=  sanFangxcService.getXingChenToken();
@@ -99,6 +102,8 @@ public class XingchenmaController {
     public @ResponseBody  String getSfNumber(@RequestBody String param){
         HashMap parammap=  JsonUtils.fromJson(param, HashMap.class);
        // String token=sanFangxcService.getXingChenToken();
+
+
         PublicResponse  resultmap=sanFangxcService.getSfNumber(parammap);
         return  JsonUtils.toJson(resultmap);
     }
@@ -149,7 +154,6 @@ public class XingchenmaController {
         }
         return result;
     }
-
 
 
     private String getValueifnul(Object val){
