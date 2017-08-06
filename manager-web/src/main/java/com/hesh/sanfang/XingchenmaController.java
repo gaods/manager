@@ -83,7 +83,7 @@ public class XingchenmaController {
         PublicResponse resultmap=sanFangxcService.getYzNumber(param);
         resultObjectWebVo.setStatus(String.valueOf(resultmap.isSuccess()));
         resultObjectWebVo.setData(String.valueOf(resultmap.getData()));
-        return  resultObjectWebVo;
+        return  null;
     }
     /**
      *

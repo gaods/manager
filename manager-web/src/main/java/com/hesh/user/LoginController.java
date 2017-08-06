@@ -44,24 +44,27 @@ public class LoginController {
         return "login";
     }
 
+
+    @RequestMapping(method = RequestMethod.GET,value = "tologin")
+    public String tologin(ModelMap model, HttpServletRequest request, HttpServletResponse response) {
+        model.addAttribute("portaltype", "purchase");
+        return "login";
+    }
+
     @RequestMapping(method = RequestMethod.POST,value = "login")
-    public @ResponseBody   MsgVo login( LoginUser logininfo , HttpServletResponse response) {
+    public @ResponseBody   MsgVo login( LoginUser logininfo , HttpServletRequest request,HttpServletResponse response) {
 
             //model.addAttribute("portaltype", "purchase");
             Map<String, Object> map = new HashMap<String, Object>();
             MsgVo msgVo=new MsgVo();
-//            Object UserName = param.get("UserName");
-//            Object PassWord = param.get("PassWord");
-           // LoginUser user = JsonUtils.fromJson(logininfo,LoginUser.class);
-           // user.setUsername(UserName == null ? null : UserName.toString());
 
+                if(logininfo.getUsername()==null){
 
-        if(logininfo.getUsername()==null){
+                }
+                if(logininfo.getPassword()==null){
 
-        }
-        if(logininfo.getPassword()==null){
+                }
 
-        }
             User result = loginService.mlogin(logininfo);
             String password = logininfo.getPassword();
             String username = logininfo.getUsername();
@@ -87,6 +90,10 @@ public class LoginController {
                         response.addCookie(cookie);
                     }
                     msgVo.setIssuccess("true");
+
+                    request.getSession().setAttribute("username",username);
+                    request.getSession().setAttribute("token",cookieValue);
+
                 } else {
                     map.put("errormsg", "用户名或密码有误，请重试！");
                     msgVo.setIssuccess("false");
@@ -100,7 +107,21 @@ public class LoginController {
 
   @RequestMapping(method = RequestMethod.GET,value = "caslogout")
     public String caslogout(ModelMap model, HttpServletRequest request, HttpServletResponse response) {
-       // model.addAttribute("portaltype", "purchase");
+
+      Cookie[] cookies = request.getCookies();
+      try {
+          if(cookies!=null){
+              for(int i=0;i<cookies.length;i++){
+                  Cookie cookie = new Cookie(cookies[i].getName(),null);
+                  cookie.setMaxAge(0);
+                  cookie.setPath("/");
+                  response.addCookie(cookie);
+              }
+          }
+
+      } catch (Exception e) {
+
+      }
         return "login";
     }
 

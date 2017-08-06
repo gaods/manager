@@ -12,10 +12,10 @@
         <constructor-arg ref="redisPool"></constructor-arg>
     </bean>
 
-    <!--<bean id="cacheManager" class="com.yonyou.cpu.cache.redis.SessionCacheManager">-->
-        <!--<property name="jedisTemplate" ref="jedisTemplate"/>-->
-        <!--<property name="sessionTimeout" value="86400"/>-->
-    <!--</bean>-->
+    <bean id="cacheManager" class="com.hesheng.cache.redis.SessionCacheManager">
+        <property name="jedisTemplate" ref="jedisTemplate"/>
+        <property name="sessionTimeout" value="86400"/>
+    </bean>
 
     <bean id="redisclinet" class="com.hesh.utils.RedisClient">
         <property name="jedisTemplate" ref="jedisTemplate" />
