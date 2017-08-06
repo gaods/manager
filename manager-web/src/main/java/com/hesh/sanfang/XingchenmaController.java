@@ -42,18 +42,16 @@ public class XingchenmaController {
      */
     @RequestMapping("/getPhoneNumberPa")
     public @ResponseBody  String getXingChenToken(@RequestBody String paramtemp){
+        logger.info(paramtemp+"aaaaaaaaaaaa");
         ResultObjectWebVo resultObjectWebVo = new ResultObjectWebVo();
         try{
             Map<String, Object> param= com.hesh.utils.WebUtils.covertToMap(paramtemp);
-
             boolean flag =  customerService.getCustomerList();
             if(flag){
                 PublicResponse<String> result=  sanFangxcService.getXingChenToken();
 
                 if(null!=result&&result.isSuccess()){
-
                     PublicResponse response =  sanFangxcService.getZcPhonePassWord(param);
-
                     resultObjectWebVo.setStatus(String.valueOf(response.isSuccess()));
                     resultObjectWebVo.setData(response.getData());
                 }else{
@@ -79,11 +77,13 @@ public class XingchenmaController {
      */
     @RequestMapping("/getYzNumber")
     public @ResponseBody  ResultObjectVo getYzNumber(@RequestBody String paramtemp){
+        ResultObjectWebVo  resultObjectWebVo = new ResultObjectWebVo();
         ResultObjectVo<String> resultObjectVo = new ResultObjectVo<String>();
         Map<String, Object> param= com.hesh.utils.WebUtils.covertToMap(paramtemp);
         PublicResponse resultmap=sanFangxcService.getYzNumber(param);
-        resultObjectVo.setData(JsonUtils.toJson(resultmap.getData()));
-        return  resultObjectVo;
+        resultObjectWebVo.setStatus(String.valueOf(resultmap.isSuccess()));
+        resultObjectWebVo.setData(String.valueOf(resultmap.getData()));
+        return  resultObjectWebVo;
     }
     /**
      *
