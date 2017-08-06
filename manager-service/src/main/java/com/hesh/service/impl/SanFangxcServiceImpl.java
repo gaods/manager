@@ -192,6 +192,9 @@ public class SanFangxcServiceImpl implements SanFangxcService {
                 }  catch (Exception ex1){
                     logger.info("getYzNumber"+ex1+"yznum"+yzNum);
                     this.getSfNumber(map);
+                    publicResponse.setData(yzNum);
+                    publicResponse.setSuccess(false);
+                    return publicResponse;
                 }
             }
             publicResponse.setData(yzmCode);
@@ -227,6 +230,8 @@ public class SanFangxcServiceImpl implements SanFangxcService {
                     publicResponse.setData(sfPhone);
                 } else {
                     this.getSfAllPhoneNumber();
+                    publicResponse.setSuccess(true);
+                    publicResponse.setData(sfPhone);
                 }
             }
         }   catch (Exception ex){
@@ -248,23 +253,28 @@ public class SanFangxcServiceImpl implements SanFangxcService {
            phoneUser = new PhoneUser();
          if(null!=map&&null!=map.get("phoneNumber")&&!("").equals(map.get("phoneNumber"))){
             String phone = (String) map.get("phoneNumber");
-            String passWord = (String) map.get("passWord");
-             phoneUser.setCuPhone(phone);//电话号码数据存储
-             phoneUser.setCuPassword(passWord);//存储密码
+             logger.info("getYgNumber-phone:"+phone);
             String phoneInfo  = redisClient.get(RedisKey.HS_PHONE+phone);
              if(null!=phoneInfo && !("").equals(phoneInfo)){
+                 logger.info("getYgNumber-phoneInfo"+JSONObject.toJSONString(phoneInfo));
                  JSONObject object = JSONObject.parseObject(phoneInfo) ;
                  phoneInfos = (Map<String, Object>)JSONObject.toJavaObject(object, Map.class);
+                 String passWord = (String) map.get("passWord");
+                 phoneUser.setCuPhone(phone);//电话号码数据存储
+                 phoneUser.setCuPassword(passWord);//存储密码
              }
             String ygNumber= redisClient.get(RedisKey.HS_CUSTOMER);
-            customer = JSONObject.parseObject(ygNumber,Customer.class);
+             if(null!=ygNumber&&!("").equals(ygNumber)){
+                 customer = JSONObject.parseObject(ygNumber,Customer.class);
+                 logger.info("getYgNumber-customer"+JSONObject.toJSONString(customer));
+             }
              //获取到缓存信息1如果结果对于0说明还存在值减减之后存到缓存，修改数据库信息
              if(null!=customer && customer.getSsCount()>0){
                  publicResponse.setSuccess(true);
                  publicResponse.setData(customer.getPnCode());
                  phoneUser.setCustomerid(customer.getId());//存储主键
                  phoneUser.setUserPin(customer.getPnCode());//存储对应的业务员的编号
-                 phoneUser.setOpUserId("TODO");//存储登陆人编号
+                 phoneUser.setOpUserId("11");//存储登陆人编号
                  phoneUserService.insertPhoneUserService(phoneUser);//存储注册的基本信息
                  int count  =customer.getSsCount();
                  int ssCount = --count;
