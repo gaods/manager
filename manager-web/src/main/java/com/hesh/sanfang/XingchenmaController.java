@@ -98,10 +98,12 @@ public class XingchenmaController {
      */
     @RequestMapping("/getSfNumber")
     public @ResponseBody  String getSfNumber(@RequestBody String paramtemp){
+        ResultObjectWebVo  resultObjectWebVo = new ResultObjectWebVo();
         Map<String, Object> param= com.hesh.utils.WebUtils.covertToMap(paramtemp);
         PublicResponse  resultmap=sanFangxcService.getSfNumber(param);
-
-        return  JsonUtils.toJson(resultmap);
+        resultObjectWebVo.setStatus(String.valueOf(resultmap.isSuccess()));
+        resultObjectWebVo.setData(String.valueOf(resultmap.getData()));
+        return  JsonUtils.toJson(resultObjectWebVo);
     }
 
     /**
@@ -113,12 +115,12 @@ public class XingchenmaController {
      */
     @RequestMapping("/getGhNumberPa")
     public @ResponseBody  String getGhNumberPa(@RequestBody String paramtemp){
-        // HashMap parammap=  JsonUtils.fromJson(param, HashMap.class);
-        // String token=sanFangxcService.getXingChenToken();
-
+        ResultObjectWebVo  resultObjectWebVo = new ResultObjectWebVo();
         Map<String, Object> param= com.hesh.utils.WebUtils.covertToMap(paramtemp);
         PublicResponse  resultmap = sanFangxcService.getYgNumber(param);
-        return  JsonUtils.toJson(resultmap);
+        resultObjectWebVo.setStatus(String.valueOf(resultmap.isSuccess()));
+        resultObjectWebVo.setData(String.valueOf(resultmap.getData()));
+        return  JsonUtils.toJson(resultObjectWebVo);
     }
 
 
@@ -130,9 +132,7 @@ public class XingchenmaController {
      */
     @RequestMapping("/InsertInfoPa")
     public @ResponseBody  String insertInfoPa(@RequestBody String paramtemp){
-
         Map<String, Object> param= com.hesh.utils.WebUtils.covertToMap(paramtemp);
-
         Object phoneNumber=param.get("phoneNumber");
         Object name=param.get("name");
         Object telphone=param.get("telphone");
@@ -143,11 +143,8 @@ public class XingchenmaController {
         employee.setName(getValueifnul(name));
         employee.setTelphone(getValueifnul(telphone));
         employee.setEmno(getValueifnul(emno));
-
         PublicResponse response= employeeService.insertpa_employee(employee);
-
         String result="1";
-
         //失败
         if(!response.isSuccess()){
             result= "2";
