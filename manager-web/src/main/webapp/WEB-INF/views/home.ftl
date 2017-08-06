@@ -59,10 +59,8 @@
                         <span class="iconfont icon-arrowdown"></span>
                     </a>
                     <ul role="menu" class="dropdown-menu" id="moreMenu">
-                        <li><a href="javascript:;" id="sysmgr">
 
-
-                         <li role="presentation" class="divider"></li><li role="presentation">
+                            <li role="presentation">
                         <a role="menuitem" href="/caslogout">
                             <i aria-hidden="true" id="logout" class="iconfont  icon-logout"></i> 注销</a></li></ul>
                 </li>
@@ -87,15 +85,18 @@
                         <li>
                             <a href="#admininfo" class="nav-header collapsed" data-toggle="collapse">
                                 <i class="glyphicon glyphicon-fire"></i>
-                                用户管理
+                                客户经理管理
                             </a>
                             <ul id="admininfo" class="nav nav-list collapse secondmenu" style="height: 0px;">
 
                                 <li>
                                     <a href="javascript:void(0);" onclick="OpenTab(this);" titile=""
-                                       rel="/admin/userlist">客户经理管理</a>
+                                       rel="/admin/userlist">客户管理</a>
                                 </li>
-
+                                <li>
+                                    <a href="javascript:void(0);" onclick="OpenTab(this);" titile=""
+                                       rel="/admin/usershow">客户查看</a>
+                                </li>
                             </ul>
                         </li>
                     </ul>

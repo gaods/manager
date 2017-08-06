@@ -78,7 +78,18 @@
 		 <include refid="Base_Column_List" />
 		 FROM pa_customer
 		 WHERE dr=0
+		<include refid="sqlCondition"/>
  	</select>
+
+	<!--分页获取数据(开始)  -->
+	<select id="getCusomerlistforshow" resultType="customer">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM pa_customer
+		WHERE dr=0
+		<include refid="sqlCondition"/>
+	</select>
+
 
 	<!-- 查询（根据主键ID查询） -->
 	<select id="selectById" resultType="customer" parameterType="java.lang.Integer">
@@ -182,18 +193,14 @@
 			<if test="ssCount != null">
 				ssCount = #{ssCount},
 			</if>
-			<if test="creater != null">
-				 creater = #{creater},
-			</if>
-			<if test="creatTime != null">
-				 creatTime = #{creatTime},
-			</if>
+
+
 			<if test="modifier != null">
 				 modifier = #{modifier},
 			</if>
-			<if test="modifyTime != null">
-				 modifyTime = #{modifyTime}
-			</if>
+
+				 modifyTime = now()
+
 
  		 </set>
 		 WHERE id = #{id}

@@ -39,7 +39,7 @@ public class CustomerServiceImpl  implements CustomerService {
             if(null!=customer){
                 flag = true;
             }  else{
-                List<Customer> list =  customerMapper.selectcustomer();
+                List<Customer> list =  customerMapper.selectcustomer(null);
                 if(null!=list && list.size()>0){
                     redisClient.set(RedisKey.HS_CUSTOMER, JSONObject.toJSONString(list.get(0)));
                     flag = true;

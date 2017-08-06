@@ -39,7 +39,7 @@ public class StatelessAuthcFilter extends AccessControlFilter {
     private String sysid;
     @Autowired
     private TokenFactory tokenFactory;
-    private String[] esc = new String[]{"/","null","/logout", "/login", "/formLogin", ".jpg", ".png", ".gif", ".css", ".js", ".jpeg", "/oauth_login", "/oauth_approval",".woff2","/fonts",".woff","tologin"};
+    private String[] esc = new String[]{"/","null","/logout", "/login", "/formLogin", ".jpg", ".png", ".gif", ".css", ".js", ".jpeg", "/oauth_login", "/oauth_approval",".woff2","/fonts",".woff","tologin","/hs","/ad"};
     private List<String> excludCongtextKeys = Arrays.asList(new String[]{"u_sysid", "tenantid", "u_callid", "u_usercode", "token", "u_logints", "u_locale", "u_theme", "u_timezone", "current_user_name", "call_thread_id", "current_tenant_id"});
 
     public StatelessAuthcFilter() {
@@ -119,7 +119,7 @@ public class StatelessAuthcFilter extends AccessControlFilter {
                     InvocationInfoProxy.setUserid(var31);
                     InvocationInfoProxy.setToken(var25);
 
-                    //this.initExtendParams(cookies);
+                    this.initExtendParams(cookies);
                    // this.initMDC();
                     this.afterValidate(hReq);
                     return true;

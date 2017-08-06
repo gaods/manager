@@ -26,7 +26,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
-public class AdminController {
+public class AdminController extends BaseController{
 
 
     @Resource
@@ -44,8 +44,19 @@ public class AdminController {
 
     @RequestMapping("userlist")
     public ModelAndView userlist(ModelMap model){
-        List<Customer> customers= loginService.getCusomerlist();
+        User user=getCurrentUserData();
+        List<Customer> customers= loginService.getCusomerlist(user);
         ModelAndView mv = new ModelAndView("userlist1");
+        mv.addObject("customers",customers);
+
+        return  mv;
+    }
+
+    @RequestMapping("/usershow")
+    public ModelAndView usershow(ModelMap model){
+        User user=getCurrentUserData();
+        List<Customer> customers= loginService.getCusomerlist(user);
+        ModelAndView mv = new ModelAndView("usershow");
         mv.addObject("customers",customers);
 
         return  mv;
@@ -55,9 +66,12 @@ public class AdminController {
 
     @RequestMapping(value = "saveuser",method = RequestMethod.POST)
     public @ResponseBody  ResultObjectVo saveuser(ModelMap model, @RequestBody String formdata){
-
+        User user= getCurrentUserData();
         List<Customer> customers=  JsonUtils.fromJsonArray(formdata,Customer.class);
-
+        if(user!=null)
+            for(Customer customer:customers){
+                customer.setCreater(user.getId().toString());
+            }
         boolean issave=loginService.saveCustomer(customers);
 
         ResultObjectVo resultObjectVo=new ResultObjectVo();
@@ -73,6 +87,28 @@ public class AdminController {
         return  resultObjectVo;
     }
 
+    @RequestMapping(value = "updateuser",method = RequestMethod.POST)
+    public @ResponseBody  ResultObjectVo updateuser(ModelMap model, @RequestBody String formdata){
+        User user= getCurrentUserData();
+        List<Customer> customers=  JsonUtils.fromJsonArray(formdata,Customer.class);
+        if(user!=null)
+            for(Customer customer:customers){
+                customer.setModifiter(user.getId().toString());
+            }
+        boolean issave=loginService.saveCustomer(customers);
+
+        ResultObjectVo resultObjectVo=new ResultObjectVo();
+
+        if(issave){
+            resultObjectVo.setStatus(1);
+        }else{
+            resultObjectVo.setStatus(0);
+        }
+
+
+
+        return  resultObjectVo;
+    }
 
 
     @RequestMapping("/showuser")

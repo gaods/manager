@@ -74,17 +74,30 @@ public class LoginService {
 
     public boolean   saveCustomer(List<Customer> customerlist){
         for(Customer customer:customerlist){
-            customer.setPastate("0");
-            customerMapper.insertcustomer(customer);
+            if(customer.getId()==null|| Long.valueOf(0).equals(customer.getId())){
+                customer.setPastate("0");
+                customerMapper.insertcustomer(customer);
+            }else{
+                customerMapper.updateByPrimaryKeySelective(customer);
+            }
+
         }
 
         return true;
     }
 
-    public List<Customer> getCusomerlist(){
+    public List<Customer> getCusomerlist(User user){
+        Customer customer=new Customer();
+        if(!Integer.valueOf(1).equals(user.getFlag()))
+             customer.setCreater(user.getId().toString());
+        return customerMapper.selectcustomer(customer);
+
+    }
+
+    public List<Customer> getCusomerlistforshow(){
 
 
-        return customerMapper.selectcustomer();
+        return customerMapper.getCusomerlistforshow();
 
     }
 

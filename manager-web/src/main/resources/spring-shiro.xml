@@ -52,6 +52,8 @@
                 /js/** = anon
                 /SSO/** = anon
                 /login = anon
+                /hs/** = anon
+                /ad/** = anon
                 /**= statelessAuthc
             </value>
         </property>

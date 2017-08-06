@@ -54,19 +54,26 @@
 //         });
 
             var data=new Array();
-
+            var ischeck=true;
             $("#userdata tr").each(function () {
 
                 var temp=new Object();
                 temp.index=$(this).find("[name=index]").val();
                 temp.id=$(this).find("[name=id]").val();
                 temp.pnCode=$(this).find("[name='pnCode']").val();
+                if(!temp.pnCode){
+                    alert("工号不能为空");
+                    ischeck=false;
+                    return ;
+                }
                 temp.zcCount=$(this).find("[name='zcCount']").val();
 
                 data.push(temp);
             });
 
-
+            if(!ischeck){
+                return;
+            }
 
             $.ajax({
                 url: "/admin/saveuser",

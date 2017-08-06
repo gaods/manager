@@ -126,61 +126,12 @@
      }
 
 
-     function  saveuser() {
-
-
-//
-//         $.ajax({
-//             url:"/admin/saveuser",
-//             type:"POST",
-//             data: $("#userform").serialize(),
-//             dataType:"text/json",
-//             success:function () {
-//                 alert();
-//             }
-//         });
-
-         var data=new Array();
-
-         $("#userdata tr").each(function () {
-
-             var temp=new Object();
-             temp.index=$(this).find("[name=index]").val();
-             temp.id=$(this).find("[name=id]").val();
-             temp.pnCode=$(this).find("[name='pnCode']").val();
-             temp.zcCount=$(this).find("[name='zcCount']").val();
-
-             data.push(temp);
-         });
-
-         $("#msg").html("");
-
-         $.ajax({
-             url: "/admin/updateuser",
-             //dataType: "text/json",
-             contentType:"application/json",
-             type:"POST",
-             data: JSON.stringify(data),
-             success: function (data,textStatus) {
-                 // alert(data);
-                 var temp1= JSON.parse(data);
-                 if(temp1){
-                     if(temp1.status==1){
-                         $("#msg").html("保存成功");
-                     }
-
-                 }
-             }
-         });
-
-     }
-
-
     </script>
 </head>
 <body>
 
-<div  style="margin-bottom:10px;"><button type="button" class="btn btn-primary" onclick="javascript:adduser()">新增客户</button>
+<div  style="margin-bottom:10px;">
+    <#--<button type="button" class="btn btn-primary" onclick="javascript:adduser()">新增客户</button>-->
     <#--<button type="button" class="btn btn-primary" onclick="javascript:importexcel()">导入</button>-->
 </div>
 <form  class="bs-example bs-example-form" role="form" id="userform">
@@ -219,14 +170,7 @@
             <td>  <input class="btn btn-default" type="button" data-toggle="modal" data-target="#myModal" onclick="showuser(${user.id!""})"
 
                          value="查看">
-            <#if user.pastate=='0'>
 
-                <input class="btn btn-default" type="button" data-toggle="modal" data-target="#editModal" onclick="edituser(${user.id!""})"
-
-                       value="修改"/>
-                    <input class="btn btn-default" type="button" onclick="deleteuser(${user.id!""})" value="删除"/>
-                <input class="btn btn-default" type="button" onclick="startuser(${user.id!""})" value="启用"/>
-            </#if>
 
                </td>
         </tr>
@@ -309,9 +253,9 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <div id="msg"></div>
-                <#--<button type="button" onclick="startuser()" class="btn btn-primary">启用</button>-->
-                <button type="button" class="btn btn-primary" onclick="saveuser()">提交更改</button>
+
+                <button type="button" onclick="startuser()" class="btn btn-primary">启用</button>
+                <#--<button type="button" class="btn btn-primary">提交更改</button>-->
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
 
             </div>

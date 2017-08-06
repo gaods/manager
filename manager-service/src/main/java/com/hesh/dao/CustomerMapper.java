@@ -19,7 +19,7 @@ public interface CustomerMapper {
      * 查询list
      * @return
      */
-    List<Customer> selectcustomer();
+    List<Customer> selectcustomer(Customer customer);
 
     /***
      * 删除根据主键
@@ -47,4 +47,6 @@ public interface CustomerMapper {
      * @return
      */
     int updateStateByPrimaryKey(Customer customer);
+
+    List<Customer> getCusomerlistforshow();
 }
