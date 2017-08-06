@@ -66,7 +66,6 @@ public class XingchenmaController {
         }catch (Exception ex){
             logger.error("调用三方异常"+ex);
         }
-
         return  JsonUtils.toJson(resultObjectWebVo);
     }
 
@@ -76,14 +75,14 @@ public class XingchenmaController {
      * @return
      */
     @RequestMapping("/getYzNumber")
-    public @ResponseBody  ResultObjectVo getYzNumber(@RequestBody String paramtemp){
+    public @ResponseBody  String getYzNumber(@RequestBody String paramtemp){
         ResultObjectWebVo  resultObjectWebVo = new ResultObjectWebVo();
         ResultObjectVo<String> resultObjectVo = new ResultObjectVo<String>();
         Map<String, Object> param= com.hesh.utils.WebUtils.covertToMap(paramtemp);
         PublicResponse resultmap=sanFangxcService.getYzNumber(param);
         resultObjectWebVo.setStatus(String.valueOf(resultmap.isSuccess()));
         resultObjectWebVo.setData(String.valueOf(resultmap.getData()));
-        return  null;
+        return  JsonUtils.toJson(resultObjectWebVo);
     }
     /**
      *
@@ -99,10 +98,7 @@ public class XingchenmaController {
      */
     @RequestMapping("/getSfNumber")
     public @ResponseBody  String getSfNumber(@RequestBody String paramtemp){
-        //HashMap parammap=  JsonUtils.fromJson(param, HashMap.class);
-        // String token=sanFangxcService.getXingChenToken();
         Map<String, Object> param= com.hesh.utils.WebUtils.covertToMap(paramtemp);
-
         PublicResponse  resultmap=sanFangxcService.getSfNumber(param);
 
         return  JsonUtils.toJson(resultmap);

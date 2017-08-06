@@ -78,9 +78,7 @@
 		 <include refid="Base_Column_List" />
 		 FROM pa_customer
 		 WHERE dr=0
-		 and pastate= '3'
-		 and creater= #{creater}
-		 	</select>
+ 	</select>
 
 	<!-- 查询（根据主键ID查询） -->
 	<select id="selectById" resultType="customer" parameterType="java.lang.Integer">

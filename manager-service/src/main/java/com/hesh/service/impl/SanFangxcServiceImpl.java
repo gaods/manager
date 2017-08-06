@@ -106,7 +106,7 @@ public class SanFangxcServiceImpl implements SanFangxcService {
                 logger.info("getZcPhonePassWord:"+paPhone);
             }
             if(null!=phoneNumber&&!("").equals(phoneNumber)){
-                String paPassWord = GetRandomNumber.generateLowerString(8);
+                String paPassWord = GetRandomNumber.generateLowerString(4);
                 ppMap.put("phoneNumber",phoneNumber);
                 ppMap.put("passWord",paPassWord);
                 redisClient.set(RedisKey.HS_PHONE+phoneNumber, JSONObject.toJSONString(ppMap));
@@ -130,7 +130,6 @@ public class SanFangxcServiceImpl implements SanFangxcService {
     public PublicResponse getYzNumber(Map<String, Object> map) {
         PublicResponse publicResponse = new PublicResponse();
         if(null!=map && null!=map.get("phoneNumber") && null!=map.get("opFlag")&&!("").equals(map.get("opFlag"))){
-            Map<String, Object> ppMap = new HashMap<String, Object>();
             String yzmCode ="";
             String yzNum="";
             String xmid = this.getXmId(map.get("opFlag"));
@@ -158,6 +157,11 @@ public class SanFangxcServiceImpl implements SanFangxcService {
                             if(yzNum.length()>20){
                                 yzmCode = yzNum.substring(yzNum.indexOf("码")+1,yzNum.indexOf("码")+7);
                             }
+                            if(yzNum.equals("1")) {
+                                publicResponse.setSuccess(false);
+                                publicResponse.setData(yzNum);
+                                return publicResponse;
+                            }
                             logger.info("getYzNumber-yzNum-0"+yzNum);
                         } else{
                             publicResponse.setSuccess(false);
@@ -171,6 +175,11 @@ public class SanFangxcServiceImpl implements SanFangxcService {
                     if(null!=yzNum && yzNum.length()>20){
                         yzmCode = yzNum.substring(yzNum.indexOf("码")+1,yzNum.indexOf("码")+7);
                     }
+                    if(yzNum.equals("1")) {
+                        publicResponse.setSuccess(false);
+                        publicResponse.setData(yzNum);
+                        return publicResponse;
+                    }
                 }
             } catch (Exception ex) {
                 //TODO 如果在使用GetYzmStr函数获取接收到短信或语音验证码时，像网络丢包或程序处理异常出错等情况下，可以使用GetYzmLogStr再次来获取丢失验证码
@@ -183,10 +192,12 @@ public class SanFangxcServiceImpl implements SanFangxcService {
                 }  catch (Exception ex1){
                     logger.info("getYzNumber"+ex1+"yznum"+yzNum);
                     this.getSfNumber(map);
+                    publicResponse.setData(yzNum);
+                    publicResponse.setSuccess(false);
+                    return publicResponse;
                 }
             }
-            ppMap.put("yzmCode",yzmCode);
-            publicResponse.setData(ppMap);
+            publicResponse.setData(yzmCode);
             publicResponse.setSuccess(true);
             return publicResponse;
         } else{
@@ -205,8 +216,7 @@ public class SanFangxcServiceImpl implements SanFangxcService {
     public PublicResponse getSfNumber(Map<String, Object> map) {
         PublicResponse publicResponse = new PublicResponse();
         try{
-            if(null!=map && null!=map.get("hm")){
-                Map<String, Object> ppMap = new HashMap<String, Object>();
+            if(null!=map && null!=map.get("phoneNumber")){
                 String token = redisClient.get(RedisKey.HS_XC_TOKEN);
                 String hm = (String)map.get("phoneNumber");
                 String sfIp=redisClient.get(RedisKey.HS_XC_IP); //数据库里查询缓存获得
@@ -220,10 +230,13 @@ public class SanFangxcServiceImpl implements SanFangxcService {
                     publicResponse.setData(sfPhone);
                 } else {
                     this.getSfAllPhoneNumber();
+                    publicResponse.setSuccess(true);
+                    publicResponse.setData(sfPhone);
                 }
-                //  ppMap.put("passWord",paPassWord);
             }
         }   catch (Exception ex){
+            logger.info("getSfNumber异常:"+ex);
+            this.getSfAllPhoneNumber();
             publicResponse.setSuccess(true);
             publicResponse.setData("sfPhone"+ex);
         }
@@ -240,23 +253,28 @@ public class SanFangxcServiceImpl implements SanFangxcService {
            phoneUser = new PhoneUser();
          if(null!=map&&null!=map.get("phoneNumber")&&!("").equals(map.get("phoneNumber"))){
             String phone = (String) map.get("phoneNumber");
-            String passWord = (String) map.get("passWord");
-             phoneUser.setCuPhone(phone);//电话号码数据存储
-             phoneUser.setCuPassword(passWord);//存储密码
+             logger.info("getYgNumber-phone:"+phone);
             String phoneInfo  = redisClient.get(RedisKey.HS_PHONE+phone);
              if(null!=phoneInfo && !("").equals(phoneInfo)){
+                 logger.info("getYgNumber-phoneInfo"+JSONObject.toJSONString(phoneInfo));
                  JSONObject object = JSONObject.parseObject(phoneInfo) ;
                  phoneInfos = (Map<String, Object>)JSONObject.toJavaObject(object, Map.class);
+                 String passWord = (String) map.get("passWord");
+                 phoneUser.setCuPhone(phone);//电话号码数据存储
+                 phoneUser.setCuPassword(passWord);//存储密码
              }
             String ygNumber= redisClient.get(RedisKey.HS_CUSTOMER);
-            customer = JSONObject.parseObject(ygNumber,Customer.class);
+             if(null!=ygNumber&&!("").equals(ygNumber)){
+                 customer = JSONObject.parseObject(ygNumber,Customer.class);
+                 logger.info("getYgNumber-customer"+JSONObject.toJSONString(customer));
+             }
              //获取到缓存信息1如果结果对于0说明还存在值减减之后存到缓存，修改数据库信息
              if(null!=customer && customer.getSsCount()>0){
                  publicResponse.setSuccess(true);
                  publicResponse.setData(customer.getPnCode());
                  phoneUser.setCustomerid(customer.getId());//存储主键
                  phoneUser.setUserPin(customer.getPnCode());//存储对应的业务员的编号
-                 phoneUser.setOpUserId("TODO");//存储登陆人编号
+                 phoneUser.setOpUserId("11");//存储登陆人编号
                  phoneUserService.insertPhoneUserService(phoneUser);//存储注册的基本信息
                  int count  =customer.getSsCount();
                  int ssCount = --count;
