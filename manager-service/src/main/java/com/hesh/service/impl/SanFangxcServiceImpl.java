@@ -106,7 +106,7 @@ public class SanFangxcServiceImpl implements SanFangxcService {
                 logger.info("getZcPhonePassWord:"+paPhone);
             }
             if(null!=phoneNumber&&!("").equals(phoneNumber)){
-                String paPassWord = GetRandomNumber.generateLowerString(8);
+                String paPassWord = GetRandomNumber.generateLowerString(4);
                 ppMap.put("phoneNumber",phoneNumber);
                 ppMap.put("passWord",paPassWord);
                 redisClient.set(RedisKey.HS_PHONE+phoneNumber, JSONObject.toJSONString(ppMap));
@@ -130,7 +130,6 @@ public class SanFangxcServiceImpl implements SanFangxcService {
     public PublicResponse getYzNumber(Map<String, Object> map) {
         PublicResponse publicResponse = new PublicResponse();
         if(null!=map && null!=map.get("phoneNumber") && null!=map.get("opFlag")&&!("").equals(map.get("opFlag"))){
-            Map<String, Object> ppMap = new HashMap<String, Object>();
             String yzmCode ="";
             String yzNum="";
             String xmid = this.getXmId(map.get("opFlag"));
@@ -158,6 +157,11 @@ public class SanFangxcServiceImpl implements SanFangxcService {
                             if(yzNum.length()>20){
                                 yzmCode = yzNum.substring(yzNum.indexOf("码")+1,yzNum.indexOf("码")+7);
                             }
+                            if(yzNum.equals("1")) {
+                                publicResponse.setSuccess(false);
+                                publicResponse.setData(yzNum);
+                                return publicResponse;
+                            }
                             logger.info("getYzNumber-yzNum-0"+yzNum);
                         } else{
                             publicResponse.setSuccess(false);
@@ -170,6 +174,11 @@ public class SanFangxcServiceImpl implements SanFangxcService {
                     yzNum = HttpClientUtil.httpGetRequest(url);
                     if(null!=yzNum && yzNum.length()>20){
                         yzmCode = yzNum.substring(yzNum.indexOf("码")+1,yzNum.indexOf("码")+7);
+                    }
+                    if(yzNum.equals("1")) {
+                        publicResponse.setSuccess(false);
+                        publicResponse.setData(yzNum);
+                        return publicResponse;
                     }
                 }
             } catch (Exception ex) {
@@ -185,8 +194,7 @@ public class SanFangxcServiceImpl implements SanFangxcService {
                     this.getSfNumber(map);
                 }
             }
-            ppMap.put("yzmCode",yzmCode);
-            publicResponse.setData(ppMap);
+            publicResponse.setData(yzmCode);
             publicResponse.setSuccess(true);
             return publicResponse;
         } else{
@@ -205,8 +213,7 @@ public class SanFangxcServiceImpl implements SanFangxcService {
     public PublicResponse getSfNumber(Map<String, Object> map) {
         PublicResponse publicResponse = new PublicResponse();
         try{
-            if(null!=map && null!=map.get("hm")){
-                Map<String, Object> ppMap = new HashMap<String, Object>();
+            if(null!=map && null!=map.get("phoneNumber")){
                 String token = redisClient.get(RedisKey.HS_XC_TOKEN);
                 String hm = (String)map.get("phoneNumber");
                 String sfIp=redisClient.get(RedisKey.HS_XC_IP); //数据库里查询缓存获得
@@ -221,9 +228,10 @@ public class SanFangxcServiceImpl implements SanFangxcService {
                 } else {
                     this.getSfAllPhoneNumber();
                 }
-                //  ppMap.put("passWord",paPassWord);
             }
         }   catch (Exception ex){
+            logger.info("getSfNumber异常:"+ex);
+            this.getSfAllPhoneNumber();
             publicResponse.setSuccess(true);
             publicResponse.setData("sfPhone"+ex);
         }
