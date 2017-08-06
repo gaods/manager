@@ -141,19 +141,16 @@ public class SanFangxcServiceImpl implements SanFangxcService {
                // TimeUnit.SECONDS.sleep(10);//程序先等待十秒钟获取验证码
                 String url = "http://"+sfIp+":9180/service.asmx/GetYzmStr?token="+token+"&hm="+hm+"&xmid="+xmid;
                 yzNum = HttpClientUtil.httpGetRequest(url);
+                logger.info("getYzNumber-yzNum:["+yzNum+"]");
                 if(null!=yzNum&&!("").equals(yzNum)){
                     // String paPhone = "2017-08-04 15:26:19收到 您正在注册平安金管家APP，验证码788479，有效期为2分钟，切勿转发或告知他人。【平安人寿】";
-                    logger.info("getYzNumber-yzNum"+yzNum);
                     if(yzNum.length()>20){
                         yzmCode = yzNum.substring(yzNum.indexOf("码")+1,yzNum.indexOf("码")+7);
                     }else{
                         if(yzNum.equals("1")) {
-                            TimeUnit.SECONDS.sleep(10);
-                            yzNum = HttpClientUtil.httpGetRequest(url);
-                            if(yzNum.length()>20){
-                                yzmCode = yzNum.substring(yzNum.indexOf("码")+1,yzNum.indexOf("码")+7);
-                                logger.info("getYzNumber-yzmCode"+yzmCode);
-                            }
+                            publicResponse.setSuccess(false);
+                            publicResponse.setData(yzNum);
+                            return publicResponse;
                         }
                         if(yzNum.equals("0")) {
                             this.getXingChenToken();
