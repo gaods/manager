@@ -79,6 +79,7 @@
 		 FROM pa_customer
 		 WHERE dr=0
 		 and pastate= '3'
+		 and creater= #{creater}
 		 	</select>
 
 	<!-- 查询（根据主键ID查询） -->
@@ -100,7 +101,7 @@
 		 INSERT INTO pa_customer
  		(id,pnCode,zcCount,pastate,ssCount,creater,creatTime,modifier,modifyTime,dr)
 		 VALUES 
- 		(#{id},#{pnCode},#{zcCount},#{pastate},#{ssCount},#{creater},#{creatTime},#{modifier},#{modifyTime},0)
+ 		(#{id},#{pnCode},#{zcCount},#{pastate},#{ssCount},#{creater},now(),#{modifier},#{modifyTime},0)
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
@@ -213,6 +214,16 @@
 			 modifier = #{modifier},
 			 modifyTime = #{modifyTime}
 		 WHERE id = #{id}
+	</update>
+
+
+	<update id="updateStateByPrimaryKey" parameterType="com.hesh.vo.user.Customer">
+		UPDATE pa_customer
+		SET
+		pastate = #{pastate},
+	 	modifier = #{modifier},
+		modifyTime = now()
+		WHERE id = #{id}
 	</update>
 
 </mapper>

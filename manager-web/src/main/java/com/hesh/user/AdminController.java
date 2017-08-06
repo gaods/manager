@@ -4,6 +4,7 @@ import com.hesh.common.utils.json.JsonUtils;
 import com.hesh.service.LoginService;
 import com.hesh.vo.user.Customer;
 import com.hesh.vo.user.PhoneUser;
+import com.hesh.vo.user.User;
 import com.hesh.web.vo.ResultObjectVo;
 import org.eclipse.jetty.util.ajax.JSON;
 import org.springframework.stereotype.Controller;
@@ -78,8 +79,8 @@ public class AdminController {
     public @ResponseBody  ResultObjectVo showuser(@RequestBody String id){
 
 
-       if(StringUtils.isEmpty("id"))
-           return null;
+        if(StringUtils.isEmpty("id"))
+            return null;
         String idtemp=id;
         if(id.indexOf('=')>0)
             idtemp=id.substring(0,id.length()-1);
@@ -96,6 +97,58 @@ public class AdminController {
         }
         return  resultObjectVo;
     }
+
+    @RequestMapping("/edituser")
+    public @ResponseBody  ResultObjectVo edituser(@RequestBody String id){
+
+
+        if(StringUtils.isEmpty("id"))
+            return null;
+        String idtemp=id;
+        if(id.indexOf('=')>0)
+            idtemp=id.substring(0,id.length()-1);
+
+        Customer customer= loginService.getCustomerById(Integer.valueOf(idtemp));
+
+        ResultObjectVo resultObjectVo=new ResultObjectVo();
+
+        if(customer!=null){
+            resultObjectVo.setStatus(1);
+            resultObjectVo.setData(customer);
+        }else{
+            resultObjectVo.setStatus(0);
+        }
+        return  resultObjectVo;
+    }
+
+
+
+    @RequestMapping("/startuser")
+    public @ResponseBody  ResultObjectVo startuser(@RequestBody String id){
+
+
+        if(StringUtils.isEmpty("id"))
+            return null;
+        String idtemp=id;
+        if(id.indexOf('=')>0)
+            idtemp=id.substring(0,id.length()-1);
+        Customer customer =new Customer();
+        customer.setId(Integer.valueOf(idtemp));
+        customer.setPastate("3");
+        boolean issuccess= loginService.updateCustomerState(customer);
+
+        ResultObjectVo resultObjectVo=new ResultObjectVo();
+
+        if(issuccess){
+            resultObjectVo.setStatus(1);
+            resultObjectVo.setData(customer);
+        }else{
+            resultObjectVo.setStatus(0);
+        }
+        return  resultObjectVo;
+    }
+
+
 
 
     @RequestMapping("/deleteuser")

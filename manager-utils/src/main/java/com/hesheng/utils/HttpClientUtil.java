@@ -167,7 +167,7 @@ public class HttpClientUtil {
             if(entity!=null){
                 //long len = entity.getContentLength();// -1 表示长度未知
                 result = EntityUtils.toString(entity);
-                result= new String(result.getBytes("ISO-8859-1"),"UTF-8");
+                //result= new String(result.getBytes("ISO-8859-1"),"UTF-8");
                 response.close();
                 //httpClient.close();//连接池管理
             }

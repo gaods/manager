@@ -5,11 +5,9 @@ import com.hesh.service.CustomerService;
 import com.hesh.service.EmployeeService;
 import com.hesh.service.impl.SanFangxcServiceImpl;
 import com.hesh.vo.ResultObjectWebVo;
-import com.hesh.vo.user.Customer;
 import com.hesh.vo.user.Employee;
 import com.hesh.vo.user.PublicResponse;
 import com.hesh.web.vo.ResultObjectVo;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Controller;
@@ -19,7 +17,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -44,10 +41,10 @@ public class XingchenmaController {
      * @return
      */
     @RequestMapping("/getPhoneNumberPa")
-    public @ResponseBody  String getXingChenToken(@RequestBody Map<String, Object> param){
+    public @ResponseBody  String getXingChenToken(@RequestBody String paramtemp){
         ResultObjectWebVo resultObjectWebVo = new ResultObjectWebVo();
         try{
-
+            Map<String, Object> param= com.hesh.utils.WebUtils.covertToMap(paramtemp);
 
             boolean flag =  customerService.getCustomerList();
             if(flag){
@@ -77,13 +74,14 @@ public class XingchenmaController {
 
     /**
      * 验证码
-     * @param param
+     * @param paramtemp
      * @return
      */
     @RequestMapping("/getYzNumber")
-    public @ResponseBody  ResultObjectVo getYzNumber(@RequestBody String param){
+    public @ResponseBody  ResultObjectVo getYzNumber(@RequestBody String paramtemp){
         ResultObjectVo<String> resultObjectVo = new ResultObjectVo<String>();
-        PublicResponse resultmap=sanFangxcService.getYzNumber(JsonUtils.fromJson(param, HashMap.class));
+        Map<String, Object> param= com.hesh.utils.WebUtils.covertToMap(paramtemp);
+        PublicResponse resultmap=sanFangxcService.getYzNumber(param);
         return  resultObjectVo;
     }
     /**
@@ -117,7 +115,7 @@ public class XingchenmaController {
      * @return
      */
     @RequestMapping("/getGhNumberPa")
-    public @ResponseBody  String getSfNumber(@RequestBody String param){
+    public @ResponseBody  String getGhNumberPa(@RequestBody String param){
         HashMap parammap=  JsonUtils.fromJson(param, HashMap.class);
        // String token=sanFangxcService.getXingChenToken();
         PublicResponse  resultmap = sanFangxcService.getYgNumber(parammap);
@@ -132,7 +130,9 @@ public class XingchenmaController {
      * @return
      */
     @RequestMapping("/InsertInfoPa")
-    public @ResponseBody  String insertInfoPa(@RequestBody Map<String, Object> param){
+    public @ResponseBody  String insertInfoPa(@RequestBody String paramtemp){
+
+        Map<String, Object> param= com.hesh.utils.WebUtils.covertToMap(paramtemp);
 
         Object phoneNumber=param.get("phoneNumber");
         Object name=param.get("name");

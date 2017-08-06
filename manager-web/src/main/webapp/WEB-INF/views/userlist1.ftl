@@ -40,6 +40,8 @@
          });
      }
 
+
+
      function showuser(id) {
         //alert(id);
          $("#phoneusers").html("");
@@ -74,12 +76,60 @@
          });
      }
 
+     function edituser(id){
+         $("#pnCode").val('');
+         $("#zcCount").val('');
+         $("#customerid").val('');
+         $.ajax({
+             url:"/admin/edituser",
+             type:"POST",
+             contentType:"application/json",
+             data:+""+id+"",
+             success:function(data) {
+                 var temp1 = JSON.parse(data);
+                 if (temp1) {
+                     if (temp1.status == 1) {
+                         var data1= temp1.data;
+                         $("#pnCode").val(data1.pnCode);
+                         $("#zcCount").val(data1.zcCount);
+                         $("#customerid").val(data1.id);
+                     } else {
+
+                     }
+                 }
+             }
+
+         });
+     }
+
+     function startuser(){
+         var id= $("#customerid").val();
+         $.ajax({
+             url:"/admin/startuser",
+             type:"POST",
+             contentType:"application/json",
+             data:+""+id+"",
+             success:function(data) {
+                 var temp1 = JSON.parse(data);
+                 if (temp1) {
+                     if (temp1.status == 1) {
+                         window.location.href="userlist";
+                     } else {
+
+                     }
+                 }
+             }
+
+         });
+     }
+
+
     </script>
 </head>
 <body>
 
 <div  style="margin-bottom:10px;"><button type="button" class="btn btn-primary" onclick="javascript:adduser()">新增客户</button>
-    <button type="button" class="btn btn-primary" onclick="javascript:importexcel()">导入</button>
+    <#--<button type="button" class="btn btn-primary" onclick="javascript:importexcel()">导入</button>-->
 </div>
 <form  class="bs-example bs-example-form" role="form" id="userform">
 
@@ -102,13 +152,30 @@
             <td>${user.pnCode!""}</td>
             <td>${user.zcCount!"0"}</td>
             <td>${user.ssCount!"0"}</td>
-            <td>${user.pastate!"0"}</td>
+            <td>
+            <#if user.pastate=='0'>
+            未开始
+            <#elseif user.pastate=='1'>
+            完成
+            <#elseif user.pastate=='3'>
+                未完成
+            <#elseif user.pastate=='2'>
+               删除
+            </#if>
+            </td>
 
             <td>  <input class="btn btn-default" type="button" data-toggle="modal" data-target="#myModal" onclick="showuser(${user.id!""})"
 
                          value="查看">
-                <input class="btn btn-default" type="button" onclick="saveuser(${user.id!""})" value="保存">
-                <input class="btn btn-default" type="button" onclick="deleteuser(${user.id!""})" value="删除"></td>
+            <#if user.pastate=='0'||user.pastate=='3'>
+
+                <input class="btn btn-default" type="button" data-toggle="modal" data-target="#editModal" onclick="edituser(${user.id!""})"
+
+                       value="修改"/>
+                    <input class="btn btn-default" type="button" onclick="deleteuser(${user.id!""})" value="删除"/>
+            </#if>
+
+               </td>
         </tr>
         </#list>
     </#if>
@@ -150,6 +217,50 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
             <#--<button type="button" class="btn btn-primary">提交更改</button>-->
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">编辑客户信息</h4>
+            </div>
+            <div class="modal-body" >
+                <form class="bs-example bs-example-form" id="customminfo" role="form">
+                    <input hidden id="customerid">
+                    <div class="form-group row">
+                        <label class="col-md-3 col-xs-4 control-label text-right"><span>工号：&nbsp;</span></label>
+
+                        <div class="col-md-5 col-xs-6 ivalidate padding4">
+                            <input id="pnCode" type="text"   class="form-control infon-input regloginname" ></input>
+
+                            <label class="tips"></label>
+                        </div>
+
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-3 col-xs-4 control-label text-right"> 数量：&nbsp;</label>
+
+                        <div class="col-md-5 col-xs-6 ivalidate padding4">
+                            <input id="zcCount" type="text" class="form-control infon-input " >
+
+                            <label class="tips"></label>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+
+                <button type="button" onclick="startuser()" class="btn btn-primary">启用</button>
+                <#--<button type="button" class="btn btn-primary">提交更改</button>-->
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal -->

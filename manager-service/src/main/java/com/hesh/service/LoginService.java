@@ -58,8 +58,23 @@ public class LoginService {
         return msgVo;
     }
 
+
+    /**
+     * 移动端 登录
+     * @param user
+     * @return
+     */
+
+    public User mlogin(LoginUser user){
+        User user1=new User();
+        user1.setUserName(user.getUsername());
+        User userVO=userMapper.selectuser(user1);
+        return userVO;
+    }
+
     public boolean   saveCustomer(List<Customer> customerlist){
         for(Customer customer:customerlist){
+            customer.setPastate("0");
             customerMapper.insertcustomer(customer);
         }
 
@@ -85,4 +100,16 @@ public class LoginService {
         logger.info("删除🆔id"+id+"数量"+i);
       return   i>0;
     }
+
+
+    public Customer getCustomerById(Integer id){
+      return   customerMapper.selectById(id);
+
+    }
+
+    public boolean updateCustomerState(Customer customer){
+
+       return customerMapper.updateStateByPrimaryKey(customer)>0;
+    }
+
 }

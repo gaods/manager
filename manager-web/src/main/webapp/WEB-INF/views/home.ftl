@@ -22,6 +22,53 @@
             <a class="navbar-brand" href="/Admin/index.html" id="logo">后台管理系统
             </a>
         </div>
+
+        <div id="bs-example-navbar-collapse-9" class="collapse navbar-collapse navbar-right">
+            <ul class="nav navbar-nav">
+                <li class="wb-sellang">
+                    <select name="i18nopts" id="i18nopts" style="display:none"><option selected="" value="zh_CN">简体中文</option><option value="en_US">English</option></select>
+                </li>
+                <li class="wb-msgtip hide">
+                    <a href="#/messageCenter" id="messageCount">
+                        <div class="u-badge u-badge-info w-20 m" data-badge="0">
+                            <i class="iconfont icon-tongzhi"></i>
+                        </div>
+                    </a>
+                </li>
+
+                <li class="yc-dropdown" id="li_msg">
+                    <a href="#" class="dropdown-toggle count-info" title="消息中心">
+                        <i class="fa fa-envelope"></i>
+                        <span id="msgcount" class="label label-warning"></span>
+                    </a>
+                    <ul id="msgcontent" class="dropdown-menu dropdown-messages">
+                        <li>
+                            <div class="text-center link-block">
+                                <a id="allmessage" href="#/ifr/%252Fgwmanage%252Fmygwapp%252Fmessagecenter%252Findex">
+                                    <i class="fa fa-envelope"></i> <strong>查看所有消息</strong>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="dropdown wb-child open">
+                    <a role="button" id="username" aria-expanded="true" href="javascript:void (0);" data-toggle="dropdown" class="navbar-avatar dropdown-toggle">
+
+                        <span class="avatar-name">11</span>
+                        <span class="iconfont icon-arrowdown"></span>
+                    </a>
+                    <ul role="menu" class="dropdown-menu" id="moreMenu">
+                        <li><a href="javascript:;" id="sysmgr">
+
+
+                         <li role="presentation" class="divider"></li><li role="presentation">
+                        <a role="menuitem" href="/caslogout">
+                            <i aria-hidden="true" id="logout" class="iconfont  icon-logout"></i> 注销</a></li></ul>
+                </li>
+            </ul>
+        </div>
+
     </div>
 </div>
 <div class="container-fluid">

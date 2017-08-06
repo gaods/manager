@@ -14,4 +14,8 @@ public interface CustomerMapper {
     List<Customer> selectcustomer();
 
     int deleteById(Integer id);
+
+    Customer selectById(Integer id);
+
+    int updateStateByPrimaryKey(Customer customer);
 }

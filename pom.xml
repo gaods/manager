@@ -24,7 +24,7 @@
         <mybatis-spring.version>1.2.3</mybatis-spring.version>
         <mybatis.version>3.3.1</mybatis.version>
         <tomcat-jdbc.version>7.0.53</tomcat-jdbc.version>
-        <servlet-api.version>2.5</servlet-api.version>
+        <servlet-api.version>3.0.1</servlet-api.version>
         <jsp.version>2.0</jsp.version>
         <shiro.version>1.2.4</shiro.version>
         <slf4j-api.version>1.6.4</slf4j-api.version>
@@ -32,13 +32,27 @@
         <fastjson.version>1.2.11</fastjson.version>
     </properties>
 
-
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>javax.servlet-api</artifactId>
+                <version>${servlet-api.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <profiles>
         <profile>
             <id>develop</id>
             <properties>
                 <env>develop</env>
+            </properties>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <env>prod</env>
             </properties>
         </profile>
     </profiles>
