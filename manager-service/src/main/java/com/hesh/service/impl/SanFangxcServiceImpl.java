@@ -182,7 +182,7 @@ public class SanFangxcServiceImpl implements SanFangxcService {
             publicResponse.setData("参数不能为空");
             publicResponse.setSuccess(false);
         }
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return publicResponse;
     }
 
     /**
