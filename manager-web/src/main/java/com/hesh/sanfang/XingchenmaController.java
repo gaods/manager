@@ -5,11 +5,9 @@ import com.hesh.service.CustomerService;
 import com.hesh.service.EmployeeService;
 import com.hesh.service.impl.SanFangxcServiceImpl;
 import com.hesh.vo.ResultObjectWebVo;
-import com.hesh.vo.user.Customer;
 import com.hesh.vo.user.Employee;
 import com.hesh.vo.user.PublicResponse;
 import com.hesh.web.vo.ResultObjectVo;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Controller;
@@ -19,7 +17,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -40,7 +37,7 @@ public class XingchenmaController {
     EmployeeService employeeService;
     /**
      *  获取号码
-     * @param param
+     * @param paramtemp
      * @return
      */
     @RequestMapping("/getPhoneNumberPa")
@@ -77,13 +74,15 @@ public class XingchenmaController {
 
     /**
      * 验证码
-     * @param param
+     * @param paramtemp
      * @return
      */
     @RequestMapping("/getYzNumber")
-    public @ResponseBody  ResultObjectVo getYzNumber(@RequestBody String param){
+    public @ResponseBody  ResultObjectVo getYzNumber(@RequestBody String paramtemp){
         ResultObjectVo<String> resultObjectVo = new ResultObjectVo<String>();
-        PublicResponse resultmap=sanFangxcService.getYzNumber(JsonUtils.fromJson(param, HashMap.class));
+        Map<String, Object> param= com.hesh.utils.WebUtils.covertToMap(paramtemp);
+        PublicResponse resultmap=sanFangxcService.getYzNumber(param);
+        resultObjectVo.setData(JsonUtils.toJson(resultmap.getData()));
         return  resultObjectVo;
     }
     /**
@@ -95,16 +94,17 @@ public class XingchenmaController {
      * 释放号码
      * 获取 token
      * 然后存起来
-     * @param param
+     * @param paramtemp
      * @return
      */
     @RequestMapping("/getSfNumber")
-    public @ResponseBody  String getSfNumber(@RequestBody String param){
-        HashMap parammap=  JsonUtils.fromJson(param, HashMap.class);
-       // String token=sanFangxcService.getXingChenToken();
+    public @ResponseBody  String getSfNumber(@RequestBody String paramtemp){
+        //HashMap parammap=  JsonUtils.fromJson(param, HashMap.class);
+        // String token=sanFangxcService.getXingChenToken();
+        Map<String, Object> param= com.hesh.utils.WebUtils.covertToMap(paramtemp);
 
+        PublicResponse  resultmap=sanFangxcService.getSfNumber(param);
 
-        PublicResponse  resultmap=sanFangxcService.getSfNumber(parammap);
         return  JsonUtils.toJson(resultmap);
     }
 
@@ -112,14 +112,16 @@ public class XingchenmaController {
      * 释放号码
      * 获取 token
      * 然后存起来
-     * @param param
+     * @param paramtemp
      * @return
      */
     @RequestMapping("/getGhNumberPa")
-    public @ResponseBody  String getSfNumber(@RequestBody String param){
-        HashMap parammap=  JsonUtils.fromJson(param, HashMap.class);
-       // String token=sanFangxcService.getXingChenToken();
-        PublicResponse  resultmap = sanFangxcService.getYgNumber(parammap);
+    public @ResponseBody  String getGhNumberPa(@RequestBody String paramtemp){
+        // HashMap parammap=  JsonUtils.fromJson(param, HashMap.class);
+        // String token=sanFangxcService.getXingChenToken();
+
+        Map<String, Object> param= com.hesh.utils.WebUtils.covertToMap(paramtemp);
+        PublicResponse  resultmap = sanFangxcService.getYgNumber(param);
         return  JsonUtils.toJson(resultmap);
     }
 
@@ -127,11 +129,13 @@ public class XingchenmaController {
     /**
      * 保存
      * 然后存起来
-     * @param param
+     * @param paramtemp
      * @return
      */
     @RequestMapping("/InsertInfoPa")
-    public @ResponseBody  String insertInfoPa(@RequestBody Map<String, Object> param){
+    public @ResponseBody  String insertInfoPa(@RequestBody String paramtemp){
+
+        Map<String, Object> param= com.hesh.utils.WebUtils.covertToMap(paramtemp);
 
         Object phoneNumber=param.get("phoneNumber");
         Object name=param.get("name");
