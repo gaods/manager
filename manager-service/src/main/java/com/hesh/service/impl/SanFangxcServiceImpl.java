@@ -50,6 +50,7 @@ public class SanFangxcServiceImpl implements SanFangxcService {
     public PublicResponse getZcPhonePassWord(Map<String, Object> map) {
         PublicResponse publicResponse = new PublicResponse();
         if(null!=map && null!=map.get("opFlag")){
+            logger.info("getZcPhonePassWord1"+JSONObject.toJSONString(map));
             Map<String, Object> ppMap = new HashMap<String, Object>();
             String phoneNumber = "";
             String xmid = this.getXmId(map.get("opFlag"));
@@ -57,6 +58,7 @@ public class SanFangxcServiceImpl implements SanFangxcService {
             String sfIp=redisClient.get(RedisKey.HS_XC_IP); //数据库里查询缓存获得
             String url =   "http://"+sfIp+":9180/service.asmx/GetHMStr?token="+token+"&xmid="+xmid+"&sl=1&lx=0&a1=&a2=&pk=";
             String paPhone  = HttpClientUtil.httpGetRequest(url);
+            logger.info("getZcPhonePassWord2"+paPhone);
             if(null!=paPhone&&!("").equals(paPhone)){
                 if(paPhone.length()>3){
                     String code = paPhone.substring(0,2);
@@ -68,6 +70,7 @@ public class SanFangxcServiceImpl implements SanFangxcService {
                     }
                     if(code.equals("id")){
                         String xid = paPhone.replaceAll("id=","");
+                        logger.info("getZcPhonePassWord3"+code);
                         try {
                             TimeUnit.SECONDS.sleep(3);    //TODO 等待十秒重新查询三方接口获取ID对应的电话号码
                             String taskUrl =   "http://"+sfIp+":9180/service.asmx/GetTaskStr?token="+token+"&id="+xid;
@@ -83,6 +86,7 @@ public class SanFangxcServiceImpl implements SanFangxcService {
                         } catch (InterruptedException e) {
                             publicResponse.setSuccess(false);
                             publicResponse.setData(paPhone);
+                            logger.error("getZcPhonePassWordcode"+e);
                             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                         }
                         logger.info("getZp得到的ID"+xid);
@@ -94,10 +98,12 @@ public class SanFangxcServiceImpl implements SanFangxcService {
                            publicResponse.setSuccess(false);
                            publicResponse.setData(paPhone);
                        }
+                    logger.info("getZcPhonePassWord失败"+paPhone);
                 }
             }else{
                 publicResponse.setSuccess(false);
                 publicResponse.setData(paPhone);
+                logger.info("getZcPhonePassWord:"+paPhone);
             }
             if(null!=phoneNumber&&!("").equals(phoneNumber)){
                 String paPassWord = GetRandomNumber.generateLowerString(8);
@@ -106,7 +112,12 @@ public class SanFangxcServiceImpl implements SanFangxcService {
                 redisClient.set(RedisKey.HS_PHONE+phoneNumber, JSONObject.toJSONString(ppMap));
                 publicResponse.setSuccess(true);
                 publicResponse.setData(ppMap);
+                logger.info("phoneNumber"+JSONObject.toJSONString(ppMap));
             }
+        } else{
+            publicResponse.setSuccess(false);
+            publicResponse.setData("参数缺少数据");
+            logger.error("数据缺失"+JSONObject.toJSONString(map));
         }
         return publicResponse;
     }
@@ -131,7 +142,8 @@ public class SanFangxcServiceImpl implements SanFangxcService {
                 String url = "http://"+sfIp+":9180/service.asmx/GetYzmStr?token="+token+"&hm="+hm+"&xmid="+xmid;
                 yzNum = HttpClientUtil.httpGetRequest(url);
                 if(null!=yzNum&&!("").equals(yzNum)){
-                  // String paPhone = "2017-08-04 15:26:19收到 您正在注册平安金管家APP，验证码788479，有效期为2分钟，切勿转发或告知他人。【平安人寿】";
+                    // String paPhone = "2017-08-04 15:26:19收到 您正在注册平安金管家APP，验证码788479，有效期为2分钟，切勿转发或告知他人。【平安人寿】";
+                    logger.info("getYzNumber-yzNum"+yzNum);
                     if(yzNum.length()>20){
                         yzmCode = yzNum.substring(yzNum.indexOf("码")+1,yzNum.indexOf("码")+7);
                     }else{
@@ -140,6 +152,7 @@ public class SanFangxcServiceImpl implements SanFangxcService {
                             yzNum = HttpClientUtil.httpGetRequest(url);
                             if(yzNum.length()>20){
                                 yzmCode = yzNum.substring(yzNum.indexOf("码")+1,yzNum.indexOf("码")+7);
+                                logger.info("getYzNumber-yzmCode"+yzmCode);
                             }
                         }
                         if(yzNum.equals("0")) {
@@ -148,6 +161,7 @@ public class SanFangxcServiceImpl implements SanFangxcService {
                             if(yzNum.length()>20){
                                 yzmCode = yzNum.substring(yzNum.indexOf("码")+1,yzNum.indexOf("码")+7);
                             }
+                            logger.info("getYzNumber-yzNum-0"+yzNum);
                         } else{
                             publicResponse.setSuccess(false);
                             publicResponse.setData(yzNum);
@@ -365,7 +379,7 @@ public class SanFangxcServiceImpl implements SanFangxcService {
                 }
                 publicResponse.setData(token);
             }
-            logger.info("调用接口超时异常"+token);
+            logger.info("getXingChenToken返回的token"+token);
         } catch (Exception ex){
             publicResponse.setSuccess(false);
             publicResponse.setData("ex"+ex);
