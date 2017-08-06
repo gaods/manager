@@ -24,7 +24,7 @@ import java.util.Map;
  */
 
 @Controller
-@RequestMapping("/xingchenma")
+@RequestMapping("/hs")
 public class XingchenmaController {
     private static final Log logger = LogFactory.getLog(XingchenmaController.class);
 
