@@ -6,6 +6,7 @@ import com.hesh.vo.user.PhoneUser;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Date;
 
 /**
  * Created with IntelliJ IDEA.
@@ -22,6 +23,7 @@ public class PhoneUserServiceImpl implements PhoneUserService {
     @Override
     public void insertPhoneUserService(PhoneUser phoneUser) {
         phoneUser.setDr(0);
+        phoneUser.setCreateTime(new Date());
         phoneUserMapper.insertpaPhoneUser(phoneUser);
     }
 }
