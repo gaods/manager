@@ -66,28 +66,30 @@ public class SanFangxcServiceImpl implements SanFangxcService {
                         String phoneNumbers = paPhone.replace("hm=","");
                         String[] paPhones = phoneNumbers.split(",");
                         phoneNumber=paPhones[0];
-                        logger.info(paPhones);
+                        String pinfo = phoneNumber.substring(0,3);
+                        if("171".equals(pinfo)){
+                            this.getZcPhonePassWord(map);
+                        }
+                        //TODO 171 号码直接
+                        logger.info("getZcPhonePassWord"+paPhones);
                     }
                     if(code.equals("id")){
                         String xid = paPhone.replaceAll("id=","");
                         logger.info("getZcPhonePassWord3"+code);
-                        try {
-                            TimeUnit.SECONDS.sleep(3);    //TODO 等待十秒重新查询三方接口获取ID对应的电话号码
-                            String taskUrl =   "http://"+sfIp+":9180/service.asmx/GetTaskStr?token="+token+"&id="+xid;
-                            paPhone  = HttpClientUtil.httpGetRequest(taskUrl);
-                            if(null!=paPhone&&!("").equals(paPhone)){
-                                if(paPhone.length()>10){
-                                    String[] paPhones = paPhone.split(",");
-                                    phoneNumber=paPhones[0];
-                                } else {
-                                   this.getZcPhonePassWord(map);
+                        // TimeUnit.SECONDS.sleep(3);    //TODO 等待十秒重新查询三方接口获取ID对应的电话号码
+                        String taskUrl =   "http://"+sfIp+":9180/service.asmx/GetTaskStr?token="+token+"&id="+xid;
+                        paPhone  = HttpClientUtil.httpGetRequest(taskUrl);
+                        if(null!=paPhone&&!("").equals(paPhone)){
+                            if(paPhone.length()>10){
+                                String[] paPhones = paPhone.split(",");
+                                phoneNumber=paPhones[0];
+                                String pinfo = phoneNumber.substring(0,3);
+                                if("171".equals(pinfo)){
+                                    this.getZcPhonePassWord(map);
                                 }
+                            } else {
+                               this.getZcPhonePassWord(map);
                             }
-                        } catch (InterruptedException e) {
-                            publicResponse.setSuccess(false);
-                            publicResponse.setData(paPhone);
-                            logger.error("getZcPhonePassWordcode"+e);
-                            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                         }
                         logger.info("getZp得到的ID"+xid);
                     }
@@ -275,9 +277,10 @@ public class SanFangxcServiceImpl implements SanFangxcService {
                  phoneUser.setCustomerid(customer.getId());//存储主键
                  phoneUser.setUserPin(customer.getPnCode());//存储对应的业务员的编号
                  phoneUser.setOpUserId("11");//存储登陆人编号
+                 logger.info("phoneUser"+JSONObject.toJSONString(phoneUser));
                  phoneUserService.insertPhoneUserService(phoneUser);//存储注册的基本信息
                  int count  =customer.getSsCount();
-                 int ssCount = --count;
+                 int ssCount = count-1;
                  //无论哪种情况必须存储基本信息
                  customer.setSsCount(ssCount);
                  if(ssCount<=0){
@@ -350,7 +353,7 @@ public class SanFangxcServiceImpl implements SanFangxcService {
         String sfIp=redisClient.get(RedisKey.HS_XC_IP); //数据库里查询缓存获得
         String url = "http://"+sfIp+":9180/service.asmx/UserExitStr?token="+token;
         String sfAll = HttpClientUtil.httpGetRequest(url);
-        if(null!=sfAll && ("1").equals(sfAll)){
+        if(null!=sfAll && ("1").equals  (sfAll)){
             redisClient.delete(redisClient.get(RedisKey.HS_XC_TOKEN));
         } else{
             redisClient.delete(redisClient.get(RedisKey.HS_XC_TOKEN));
