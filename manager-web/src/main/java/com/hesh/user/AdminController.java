@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -70,6 +71,7 @@ public class AdminController extends BaseController{
         List<Customer> customers=  JsonUtils.fromJsonArray(formdata,Customer.class);
         if(user!=null)
             for(Customer customer:customers){
+                customer.setSsCount(customer.getZcCount());
                 customer.setCreater(user.getId().toString());
             }
         boolean issave=loginService.saveCustomer(customers);
@@ -90,12 +92,14 @@ public class AdminController extends BaseController{
     @RequestMapping(value = "updateuser",method = RequestMethod.POST)
     public @ResponseBody  ResultObjectVo updateuser(ModelMap model, @RequestBody String formdata){
         User user= getCurrentUserData();
-        List<Customer> customers=  JsonUtils.fromJsonArray(formdata,Customer.class);
+        Customer customers=  JsonUtils.fromJson(formdata,Customer.class);
         if(user!=null)
-            for(Customer customer:customers){
-                customer.setModifiter(user.getId().toString());
-            }
-        boolean issave=loginService.saveCustomer(customers);
+                  customers.setModifier(user.getId().toString());
+         customers.setSsCount(customers.getZcCount());
+
+         List<Customer> customerlist=new ArrayList<Customer>();
+         customerlist.add(customers);
+         boolean issave=loginService.saveCustomer(customerlist);
 
         ResultObjectVo resultObjectVo=new ResultObjectVo();
 

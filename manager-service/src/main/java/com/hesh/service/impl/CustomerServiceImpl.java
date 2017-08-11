@@ -55,4 +55,11 @@ public class CustomerServiceImpl  implements CustomerService {
     public void updateCustomerById(Customer customer) {
          customerMapper.updateByPrimaryKeySelective(customer);
     }
+
+    @Override
+    public List<Customer> getCustomerListForExport(Customer customer) {
+
+
+        return  customerMapper.selectcustomer(customer);
+    }
 }

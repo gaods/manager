@@ -17,7 +17,7 @@
 		<result property="creator" column="creator" jdbcType="VARCHAR" />
 		<result property="flag" column="flag" jdbcType="VARCHAR" />
 		<!---->
-		<result property="createTime" column="create_time" jdbcType="VARCHAR" />
+		<result property="createTime" column="create_time" jdbcType="DATE" />
 		<!---->
 		<result property="ts" column="ts" jdbcType="TIMESTAMP" />
 		<!--删除标志-->
@@ -93,7 +93,7 @@
 		 INSERT INTO pa_employee
  		(id,name,telphone,emno,creator,create_time,flag,ts,dr)
 		 VALUES 
- 		(#{id},#{name},#{telphone},#{emno},#{creator},#{createTime},#{flag},now(),0)
+ 		(#{id},#{name},#{telphone},#{emno},#{creator},now(),#{flag},now(),0)
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->

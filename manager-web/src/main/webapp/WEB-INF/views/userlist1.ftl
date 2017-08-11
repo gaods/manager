@@ -140,18 +140,11 @@
 //             }
 //         });
 
-         var data=new Array();
+         var data=new Object();
+         data.pnCode=$("#pnCode").val();
+         data.zcCount=$("#zcCount").val();
+         data.id=$("#customerid").val();
 
-         $("#userdata tr").each(function () {
-
-             var temp=new Object();
-             temp.index=$(this).find("[name=index]").val();
-             temp.id=$(this).find("[name=id]").val();
-             temp.pnCode=$(this).find("[name='pnCode']").val();
-             temp.zcCount=$(this).find("[name='zcCount']").val();
-
-             data.push(temp);
-         });
 
          $("#msg").html("");
 

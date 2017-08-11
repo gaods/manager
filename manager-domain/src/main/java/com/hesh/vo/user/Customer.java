@@ -40,11 +40,6 @@ public class Customer  extends BaseEntityBean {
 
 
 
-    /**修改人**/
-    private String modifiter;
-
-
-
     public void setId(Integer id){
         this.id = id;
     }
@@ -101,13 +96,6 @@ public class Customer  extends BaseEntityBean {
         return this.creatTime;
     }
 
-    public void setModifiter(String modifiter){
-        this.modifiter = modifiter;
-    }
-
-    public String getModifiter(){
-        return this.modifiter;
-    }
 
     public Integer getSsCount() {
         return ssCount;

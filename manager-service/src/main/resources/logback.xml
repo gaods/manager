@@ -1,23 +1,95 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <!-- ch.qos.logback.core.ConsoleAppender 控制台print -->
-    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %logger{36} - %msg%n</pattern>
+            <pattern>[%t %d{yyyy-MM-dd HH:mm:ss} %-5p]-%c %m%n</pattern>
         </encoder>
     </appender>
-    <!-- 日志级别 -->
-    <root>
-        <level value="error" />
-        <level value="info" />
-        <!-- <level value="debug" />-->
-        <appender-ref ref="console" />
-    </root>
-    <logger name="org.apache.ibatis" level="ERROR">
-        <appender-ref ref="STDOUT"/>
+    <appender name="hesheng-debug" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>/export/log/hesh/hesheng-debug.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <FileNamePattern>/exports/log/hesh/hesheng-debug.%i.log</FileNamePattern>
+            <MinIndex>1</MinIndex>
+            <MaxIndex>5</MaxIndex>
+        </rollingPolicy>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <MaxFileSize>500MB</MaxFileSize>
+        </triggeringPolicy>
+        <encoder>
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss}[%thread] %-5p]-%c %m%n</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
+            <onMatch>ACCEPT</onMatch>      
+            <onMismatch>DENY</onMismatch>  
+        </filter>
+    </appender>
+
+    <appender name="hesheng-error" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>/export/log/hesh/hesheng-error.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <FileNamePattern>/exports/log/hesh/hesheng-error.%i.log</FileNamePattern>
+            <MinIndex>1</MinIndex>
+            <MaxIndex>5</MaxIndex>
+        </rollingPolicy>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <MaxFileSize>500MB</MaxFileSize>
+        </triggeringPolicy>
+        <encoder>
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss}[%thread] %-5p]-%c %m%n</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
+            <onMatch>ACCEPT</onMatch>      
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <appender name="hesheng-mybatis" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>/export/log/hesh/hesheng-mybatis.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <FileNamePattern>/exports/log/cpu-order/service.oass.o2o.jd.com/o2o-oass-mybatis.%i.log</FileNamePattern>
+            <MinIndex>1</MinIndex>
+            <MaxIndex>5</MaxIndex>
+        </rollingPolicy>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <MaxFileSize>500MB</MaxFileSize>
+        </triggeringPolicy>
+        <encoder>
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss}[%thread] %-5p]-%c %m%n</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+    </appender>
+
+    <logger name="com.hesheng" additivity="false" level="DEBUG">
+        <appender-ref ref="hesheng-debug" />
+        <appender-ref ref="hesheng-error" />
+        <appender-ref ref="STDOUT" />
     </logger>
 
-    <logger name="java.sql" level="ERROR">
-        <appender-ref ref="STDOUT"/>
+
+    <logger name="com.hesh" additivity="false" level="DEBUG">
+        <appender-ref ref="hesheng-debug" />
+        <appender-ref ref="hesheng-error" />
+        <appender-ref ref="STDOUT" />
     </logger>
+    <logger name="org.apache.ibatis" additivity="false" level="DEBUG"><appender-ref ref="hesheng-mybatis"/></logger>
+    <logger name="java.sql.PreparedStatement" additivity="false" level="DEBUG"><appender-ref ref="hesheng-mybatis"/></logger>
+    <logger name="java.sql.ResultSet" additivity="false" level="DEBUG"><appender-ref ref="hesheng-mybatis"/></logger>
+    <logger name="java.sql.Connection" additivity="false" level="DEBUG"><appender-ref ref="hesheng-mybatis"/></logger>
+
+    <logger name="org.apache" additivity="false" level="INFO"><appender-ref ref="hesheng-debug"/></logger>
+
+
+
+
+    <root level="INFO">
+        <appender-ref ref="hesheng-debug" />
+        <appender-ref ref="hesheng-error" />
+        <appender-ref ref="hesheng-mybatis" />
+        <appender-ref ref="STDOUT" />
+    </root>
+
 </configuration>

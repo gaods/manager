@@ -145,11 +145,16 @@ public class XingchenmaController {
         employee.setEmno(getValueifnul(emno));
         PublicResponse response= employeeService.insertpa_employee(employee);
         String result="1";
+        HashMap res=new HashMap();
+        res.put("data",1);
+
         //失败
         if(!response.isSuccess()){
-            result= "2";
+            res.put("data",2);
+
+            res.put("msg",response.getErrorInfos());
         }
-        return result;
+        return JsonUtils.toJson(res);
     }
 
 

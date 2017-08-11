@@ -105,7 +105,7 @@
      function startuser(id){
 
          $.ajax({
-             url:"/admin/startuser",
+             url:"/customer/exportExcel",
              type:"POST",
              contentType:"application/json",
              data:+""+id+"",
@@ -124,7 +124,11 @@
 
          });
      }
+    function exportexcel() {
 
+        $("#exportform").attr("action","/customer/exportExcel");
+        $("#exportform").submit();
+    }
 
     </script>
 </head>
@@ -132,7 +136,9 @@
 
 <div  style="margin-bottom:10px;">
     <#--<button type="button" class="btn btn-primary" onclick="javascript:adduser()">新增客户</button>-->
-    <#--<button type="button" class="btn btn-primary" onclick="javascript:importexcel()">导入</button>-->
+
+   <form id="exportform"></form>
+    <button type="button" class="btn btn-primary" onclick="javascript:exportexcel()">导出</button>
 </div>
 <form  class="bs-example bs-example-form" role="form" id="userform">
 

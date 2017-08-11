@@ -13,6 +13,7 @@
         <module>manager-service</module>
         <module>common-utils</module>
         <module>manager-utils</module>
+        <module>common-dao</module>
     </modules>
 
     <packaging>pom</packaging>

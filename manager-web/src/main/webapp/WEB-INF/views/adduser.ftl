@@ -35,7 +35,7 @@
 
             var usercount="<input type=\"text\" class=\"form-control\" name=\"zcCount\">";
 
-            $("#userdata").append("<tr>"+index+id+"<td>"+userno+"</td><td>"+usercount+"</td><td>删除</td></tr>");
+            $("#userdata").append("<tr>"+index+id+"<td>"+userno+"</td><td>"+usercount+"</td></tr>");
 
         }
 
@@ -87,6 +87,7 @@
                     if(temp1){
                         if(temp1.status==1){
                             $("#msg").html("保存成功");
+                            window.location.href="userlist";
                         }
 
                     }
@@ -108,7 +109,7 @@
         <tr>
             <th>工号</th>
             <th>数量</th>
-            <th>操作</th>
+            <#--<th>操作</th>-->
         </tr>
         </thead>
         <tbody id="userdata">

@@ -15,4 +15,6 @@ public interface CustomerService {
     public boolean getCustomerList();
 
     public void updateCustomerById(Customer customer);
+
+    public List<Customer> getCustomerListForExport(Customer customer);
 }

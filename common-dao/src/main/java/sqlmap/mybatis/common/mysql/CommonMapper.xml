@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yonyou.cpu.commons.dao.CommonMapper">
+    <sql id="pagingLimit">
+        <if test="extFields != null and extFields.start != null">
+            limit ${extFields.start},
+            <choose>
+                <when test="extFields.limit != null">
+                    ${extFields.limit}
+                </when>
+                <otherwise>
+                    ${pageSize}
+                </otherwise>
+            </choose>
+        </if>
+    </sql>
+
+    <select id="selectCurrentDateTime" resultType="java.util.Date">
+        select CURRENT_TIMESTAMP()
+    </select>
+
+    <sql id="sortSql">
+        <if test="sortItemMap != null">
+            ORDER BY
+            <foreach item="item" collection="sortItemMap.entrySet()" open="" separator="," close="">
+                ${item.key}
+                <choose>
+                    <when test="item.value == 'ASC'">
+                        ASC
+                    </when>
+                    <otherwise>
+                        DESC
+                    </otherwise>
+                </choose>
+            </foreach>
+        </if>
+    </sql>
+
+</mapper>
